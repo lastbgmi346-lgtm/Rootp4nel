@@ -1,5 +1,16 @@
 [
   {
+    "key": "NEXO-1E6NP4LF",
+    "duration": 1,
+    "durationType": "minutes",
+    "durationLabel": "1 Minute",
+    "status": "active",
+    "created": "2026-06-30T13:21:24.503Z",
+    "expires": "2026-06-30T13:22:24.503Z",
+    "usedBy": null,
+    "usedAt": null
+  },
+  {
     "key": "NEXO-YY0ZAAER",
     "duration": 1,
     "status": "active",
