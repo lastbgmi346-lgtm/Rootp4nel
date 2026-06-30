@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NEXO Admin Panel - Key Management</title>
+    <title>NEXO Admin Panel - Auto Sync</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', sans-serif;
             background: #0a0a12;
@@ -22,18 +17,11 @@
                 radial-gradient(ellipse at 50% 0%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
                 radial-gradient(ellipse at 50% 100%, rgba(112, 0, 255, 0.05) 0%, transparent 50%);
         }
-
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #14141e; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { 
-            background: linear-gradient(180deg, #00e5ff, #7000ff);
-            border-radius: 10px;
-        }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00e5ff, #7000ff); border-radius: 10px; }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1400px; margin: 0 auto; }
 
         .header {
             display: flex;
@@ -54,7 +42,6 @@
             align-items: center;
             gap: 12px;
         }
-
         .logo-icon {
             font-size: 32px;
             background: linear-gradient(135deg, #00e5ff, #7000ff);
@@ -63,7 +50,6 @@
             font-weight: 900;
             font-family: 'Orbitron', sans-serif;
         }
-
         .logo-text {
             font-size: 20px;
             font-weight: 700;
@@ -72,7 +58,6 @@
             -webkit-text-fill-color: transparent;
             font-family: 'Orbitron', sans-serif;
         }
-
         .logo-sub {
             font-size: 12px;
             color: #8e8e9f;
@@ -84,7 +69,6 @@
             gap: 25px;
             flex-wrap: wrap;
         }
-
         .stat-item {
             text-align: center;
             padding: 8px 18px;
@@ -92,7 +76,6 @@
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.05);
         }
-
         .stat-number {
             font-size: 22px;
             font-weight: 700;
@@ -100,7 +83,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         .stat-label {
             font-size: 10px;
             color: #8e8e9f;
@@ -127,7 +109,6 @@
             align-items: center;
             gap: 10px;
         }
-
         .gen-title span {
             color: #8e8e9f;
             font-weight: 300;
@@ -140,9 +121,7 @@
             flex-wrap: wrap;
             align-items: center;
         }
-
-        .gen-row select,
-        .gen-row input {
+        .gen-row select, .gen-row input {
             padding: 12px 18px;
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.08);
@@ -153,26 +132,13 @@
             transition: all 0.3s ease;
             font-family: 'Inter', sans-serif;
         }
-
-        .gen-row select:focus,
-        .gen-row input:focus {
+        .gen-row select:focus, .gen-row input:focus {
             border-color: #7000ff;
             box-shadow: 0 0 20px rgba(112, 0, 255, 0.15);
         }
-
-        .gen-row select {
-            min-width: 180px;
-            cursor: pointer;
-        }
-
-        .gen-row input {
-            min-width: 250px;
-            flex: 1;
-        }
-
-        .gen-row input::placeholder {
-            color: #505066;
-        }
+        .gen-row select { min-width: 180px; cursor: pointer; }
+        .gen-row input { min-width: 250px; flex: 1; }
+        .gen-row input::placeholder { color: #505066; }
 
         .btn {
             padding: 12px 30px;
@@ -186,59 +152,40 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .btn-primary {
             background: linear-gradient(135deg, #00e5ff, #7000ff);
             color: #fff;
             box-shadow: 0 4px 20px rgba(112, 0, 255, 0.3);
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(112, 0, 255, 0.4);
-        }
-
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(112, 0, 255, 0.4); }
         .btn-danger {
             background: linear-gradient(135deg, #ff0044, #ff0066);
             color: #fff;
         }
-
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(255, 0, 68, 0.3);
-        }
-
+        .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(255, 0, 68, 0.3); }
         .btn-success {
             background: linear-gradient(135deg, #00ff88, #00cc66);
             color: #0a0a12;
         }
-
-        .btn-success:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(0, 255, 136, 0.3);
-        }
-
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(0, 255, 136, 0.3); }
         .btn-outline {
             background: transparent;
             border: 1px solid rgba(255,255,255,0.15);
             color: #8e8e9f;
         }
-
-        .btn-outline:hover {
-            border-color: #00e5ff;
-            color: #fff;
-        }
-
+        .btn-outline:hover { border-color: #00e5ff; color: #fff; }
         .btn-sync {
             background: linear-gradient(135deg, #ff6b00, #ff9500);
             color: #fff;
             box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
         }
-
-        .btn-sync:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(255, 107, 0, 0.4);
+        .btn-sync:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(255, 107, 0, 0.4); }
+        .btn-github {
+            background: linear-gradient(135deg, #6e5494, #24292e);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(110, 84, 148, 0.3);
         }
+        .btn-github:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(110, 84, 148, 0.4); }
 
         .quick-types {
             display: flex;
@@ -246,7 +193,6 @@
             flex-wrap: wrap;
             margin: 15px 0 5px 0;
         }
-
         .quick-type {
             padding: 6px 14px;
             border-radius: 6px;
@@ -258,18 +204,8 @@
             transition: all 0.3s ease;
             font-weight: 500;
         }
-
-        .quick-type:hover {
-            border-color: #7000ff;
-            color: #fff;
-            background: rgba(112, 0, 255, 0.1);
-        }
-
-        .quick-type.active {
-            border-color: #00e5ff;
-            color: #00e5ff;
-            background: rgba(0, 229, 255, 0.08);
-        }
+        .quick-type:hover { border-color: #7000ff; color: #fff; background: rgba(112, 0, 255, 0.1); }
+        .quick-type.active { border-color: #00e5ff; color: #00e5ff; background: rgba(0, 229, 255, 0.08); }
 
         .bulk-options {
             display: flex;
@@ -279,7 +215,6 @@
             padding-top: 12px;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
-
         .bulk-options input {
             width: 80px;
             padding: 8px 12px;
@@ -290,11 +225,7 @@
             text-align: center;
             font-size: 14px;
         }
-
-        .bulk-options input:focus {
-            border-color: #7000ff;
-            outline: none;
-        }
+        .bulk-options input:focus { border-color: #7000ff; outline: none; }
 
         .export-section {
             display: flex;
@@ -304,11 +235,7 @@
             padding-top: 15px;
             border-top: 1px solid rgba(255,255,255,0.05);
         }
-
-        .export-section .btn {
-            font-size: 12px;
-            padding: 8px 20px;
-        }
+        .export-section .btn { font-size: 12px; padding: 8px 20px; }
 
         .table-container {
             background: rgba(20, 20, 30, 0.8);
@@ -317,7 +244,6 @@
             overflow: hidden;
             backdrop-filter: blur(12px);
         }
-
         .table-header {
             display: flex;
             justify-content: space-between;
@@ -327,20 +253,17 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-
         .table-header h2 {
             font-size: 16px;
             font-weight: 600;
             color: #00e5ff;
             font-family: 'Orbitron', sans-serif;
         }
-
         .table-actions {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
-
         .search-box {
             padding: 8px 16px;
             border-radius: 8px;
@@ -352,30 +275,12 @@
             min-width: 200px;
             transition: all 0.3s ease;
         }
+        .search-box:focus { border-color: #7000ff; }
+        .search-box::placeholder { color: #505066; }
 
-        .search-box:focus {
-            border-color: #7000ff;
-        }
-
-        .search-box::placeholder {
-            color: #505066;
-        }
-
-        .table-wrap {
-            overflow-x: auto;
-            padding: 0 5px 5px 5px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        thead {
-            background: rgba(0, 229, 255, 0.03);
-        }
-
+        .table-wrap { overflow-x: auto; padding: 0 5px 5px 5px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        thead { background: rgba(0, 229, 255, 0.03); }
         th {
             padding: 14px 16px;
             text-align: left;
@@ -386,16 +291,12 @@
             letter-spacing: 0.5px;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-
         td {
             padding: 14px 16px;
             border-bottom: 1px solid rgba(255,255,255,0.03);
             color: #e0e0e0;
         }
-
-        tr:hover td {
-            background: rgba(255,255,255,0.02);
-        }
+        tr:hover td { background: rgba(255,255,255,0.02); }
 
         .key-value {
             font-family: 'Monaco', 'Courier New', monospace;
@@ -406,7 +307,6 @@
             border-radius: 4px;
             display: inline-block;
         }
-
         .status-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -415,22 +315,9 @@
             font-weight: 600;
             text-transform: uppercase;
         }
-
-        .status-active {
-            background: rgba(0, 255, 136, 0.15);
-            color: #00ff88;
-        }
-
-        .status-expired {
-            background: rgba(255, 0, 68, 0.15);
-            color: #ff0044;
-        }
-
-        .status-used {
-            background: rgba(255, 165, 0, 0.15);
-            color: #ffa500;
-        }
-
+        .status-active { background: rgba(0, 255, 136, 0.15); color: #00ff88; }
+        .status-expired { background: rgba(255, 0, 68, 0.15); color: #ff0044; }
+        .status-used { background: rgba(255, 165, 0, 0.15); color: #ffa500; }
         .badge-days {
             font-size: 11px;
             background: rgba(112, 0, 255, 0.15);
@@ -439,11 +326,7 @@
             border-radius: 4px;
         }
 
-        .action-btns {
-            display: flex;
-            gap: 6px;
-        }
-
+        .action-btns { display: flex; gap: 6px; }
         .action-btn {
             padding: 4px 12px;
             border: none;
@@ -453,40 +336,14 @@
             transition: all 0.2s ease;
             font-weight: 500;
         }
+        .action-btn.delete { background: rgba(255, 0, 68, 0.15); color: #ff0044; }
+        .action-btn.delete:hover { background: rgba(255, 0, 68, 0.3); }
+        .action-btn.copy { background: rgba(0, 229, 255, 0.1); color: #00e5ff; }
+        .action-btn.copy:hover { background: rgba(0, 229, 255, 0.2); }
 
-        .action-btn.delete {
-            background: rgba(255, 0, 68, 0.15);
-            color: #ff0044;
-        }
-
-        .action-btn.delete:hover {
-            background: rgba(255, 0, 68, 0.3);
-        }
-
-        .action-btn.copy {
-            background: rgba(0, 229, 255, 0.1);
-            color: #00e5ff;
-        }
-
-        .action-btn.copy:hover {
-            background: rgba(0, 229, 255, 0.2);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #505066;
-        }
-
-        .empty-state .icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .empty-state h3 {
-            color: #8e8e9f;
-            margin-bottom: 8px;
-        }
+        .empty-state { text-align: center; padding: 50px 20px; color: #505066; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-state h3 { color: #8e8e9f; margin-bottom: 8px; }
 
         .toast {
             position: fixed;
@@ -502,71 +359,57 @@
             border: 1px solid rgba(255,255,255,0.05);
             max-width: 400px;
         }
+        .toast-success { background: rgba(0, 255, 136, 0.1); color: #00ff88; border-color: rgba(0, 255, 136, 0.2); }
+        .toast-error { background: rgba(255, 0, 68, 0.1); color: #ff0044; border-color: rgba(255, 0, 68, 0.2); }
+        .toast-info { background: rgba(0, 229, 255, 0.1); color: #00e5ff; border-color: rgba(0, 229, 255, 0.2); }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .toast.hide { animation: slideOut 0.3s ease forwards; }
+        @keyframes slideOut { from { opacity: 1; transform: translateY(30px); } to { opacity: 0; transform: translateY(30px); } }
 
-        .toast-success {
-            background: rgba(0, 255, 136, 0.1);
-            color: #00ff88;
-            border-color: rgba(0, 255, 136, 0.2);
+        /* GitHub Token Input */
+        .token-section {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-
-        .toast-error {
-            background: rgba(255, 0, 68, 0.1);
-            color: #ff0044;
-            border-color: rgba(255, 0, 68, 0.2);
+        .token-section input {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: #0a0a12;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            min-width: 300px;
         }
-
-        .toast-info {
-            background: rgba(0, 229, 255, 0.1);
-            color: #00e5ff;
-            border-color: rgba(0, 229, 255, 0.2);
+        .token-section input:focus { border-color: #7000ff; }
+        .token-section input::placeholder { color: #505066; }
+        .token-status {
+            font-size: 12px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.03);
         }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .toast.hide {
-            animation: slideOut 0.3s ease forwards;
-        }
-
-        @keyframes slideOut {
-            from { opacity: 1; transform: translateY(30px); }
-            to { opacity: 0; transform: translateY(0); }
-        }
+        .token-status.active { color: #00ff88; }
+        .token-status.inactive { color: #ff0044; }
 
         @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-            .header-stats {
-                justify-content: center;
-            }
-            .gen-row {
-                flex-direction: column;
-            }
-            .gen-row select,
-            .gen-row input {
-                width: 100%;
-                min-width: unset;
-            }
-            .table-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .table-actions {
-                flex-direction: column;
-            }
-            .search-box {
-                width: 100%;
-            }
-            .toast {
-                left: 20px;
-                right: 20px;
-                bottom: 20px;
-            }
+            .header { flex-direction: column; align-items: stretch; text-align: center; }
+            .header-stats { justify-content: center; }
+            .gen-row { flex-direction: column; }
+            .gen-row select, .gen-row input { width: 100%; min-width: unset; }
+            .table-header { flex-direction: column; align-items: stretch; }
+            .table-actions { flex-direction: column; }
+            .search-box { width: 100%; }
+            .toast { left: 20px; right: 20px; bottom: 20px; }
+            .token-section { flex-direction: column; }
+            .token-section input { min-width: unset; }
         }
     </style>
 </head>
@@ -580,7 +423,7 @@
             <span class="logo-icon">◆</span>
             <div>
                 <div class="logo-text">NEXO ADMIN</div>
-                <div class="logo-sub">Key Management System v2.0</div>
+                <div class="logo-sub">Auto-Sync v3.0</div>
             </div>
         </div>
         <div class="header-stats" id="headerStats">
@@ -607,10 +450,19 @@
     <div class="gen-panel">
         <div class="gen-title">
             🔑 Generate New Key
-            <span>— Create premium access keys for users</span>
+            <span>— Auto-sync to GitHub</span>
         </div>
 
-        <div class="gen-row">
+        <!-- ===== TOKEN SETUP ===== -->
+        <div class="token-section">
+            <input type="password" id="githubToken" placeholder="Enter GitHub Personal Access Token (ghp_xxxxx)" />
+            <button class="btn btn-github" onclick="saveToken()" style="padding:8px 20px; font-size:12px;">
+                🔐 Save Token
+            </button>
+            <span class="token-status inactive" id="tokenStatus">⚠️ Token not set</span>
+        </div>
+
+        <div class="gen-row" style="margin-top:15px;">
             <select id="durationSelect">
                 <option value="1">1 Day</option>
                 <option value="2">2 Days</option>
@@ -655,12 +507,11 @@
             <button class="btn btn-success" onclick="bulkGenerate()" style="padding:8px 20px; font-size:12px;">Generate Bulk</button>
         </div>
 
-        <!-- ===== EXPORT + SYNC SECTION ===== -->
         <div class="export-section">
-            <button class="btn btn-outline" onclick="exportKeys()" style="font-size:12px; padding:8px 20px;">📥 Export All Keys</button>
+            <button class="btn btn-outline" onclick="exportKeys()" style="font-size:12px; padding:8px 20px;">📥 Export All</button>
             <button class="btn btn-outline" onclick="exportActiveKeys()" style="font-size:12px; padding:8px 20px;">📥 Export Active</button>
-            <button class="btn btn-sync" onclick="syncKeysToJSON()" style="font-size:12px; padding:8px 20px;">
-                📤 Sync to JSON
+            <button class="btn btn-sync" onclick="manualSyncToGitHub()" style="font-size:12px; padding:8px 20px;">
+                🔄 Manual Sync to GitHub
             </button>
             <button class="btn btn-danger" onclick="clearAllKeys()" style="font-size:12px; padding:8px 20px;">🗑️ Clear All</button>
         </div>
@@ -696,8 +547,7 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="keyTableBody">
-                </tbody>
+                <tbody id="keyTableBody"></tbody>
             </table>
         </div>
     </div>
@@ -709,20 +559,125 @@
 
 <script>
     // ============================================================
-    // DATA LAYER - All keys stored in localStorage
+    // CONFIGURATION
     // ============================================================
 
     const STORAGE_KEY = 'nexo_keys_data';
+    const TOKEN_KEY = 'github_token';
+    
+    // 🔥 CHANGE THESE VALUES
+    const GITHUB_OWNER = 'lastbgmi346-lgtm';
+    const GITHUB_REPO = 'Rootp4nel';
+    const GITHUB_PATH = 'keys.json';
+    const GITHUB_BRANCH = 'main';
+
+    // ============================================================
+    // TOKEN MANAGEMENT
+    // ============================================================
+
+    function getToken() {
+        return localStorage.getItem(TOKEN_KEY) || '';
+    }
+
+    function saveToken() {
+        const token = document.getElementById('githubToken').value.trim();
+        if (token && token.startsWith('ghp_')) {
+            localStorage.setItem(TOKEN_KEY, token);
+            updateTokenStatus();
+            showToast('✅ GitHub Token saved!', 'success');
+        } else {
+            showToast('❌ Invalid token! Must start with ghp_', 'error');
+        }
+    }
+
+    function updateTokenStatus() {
+        const token = getToken();
+        const statusEl = document.getElementById('tokenStatus');
+        if (token && token.startsWith('ghp_')) {
+            statusEl.className = 'token-status active';
+            statusEl.textContent = '✅ Token configured';
+        } else {
+            statusEl.className = 'token-status inactive';
+            statusEl.textContent = '⚠️ Token not set';
+        }
+        document.getElementById('githubToken').value = token;
+    }
+
+    // ============================================================
+    // 🔥 AUTO-SYNC TO GITHUB - Key generate karte hi push ho jayega!
+    // ============================================================
+
+    async function syncToGitHub(keys) {
+        const token = getToken();
+        if (!token || !token.startsWith('ghp_')) {
+            showToast('⚠️ Please set GitHub token first!', 'error');
+            return false;
+        }
+
+        try {
+            const jsonContent = JSON.stringify(keys, null, 2);
+            const encodedContent = btoa(unescape(encodeURIComponent(jsonContent)));
+
+            // 🔥 Step 1: Get current file SHA
+            const getUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
+            const getResponse = await fetch(getUrl, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            let sha = null;
+            if (getResponse.ok) {
+                const data = await getResponse.json();
+                sha = data.sha;
+            }
+
+            // 🔥 Step 2: Push updated file
+            const pushUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
+            const pushData = {
+                message: `Auto-sync: Update keys.json (${new Date().toISOString()})`,
+                content: encodedContent,
+                branch: GITHUB_BRANCH
+            };
+            if (sha) {
+                pushData.sha = sha;
+            }
+
+            const pushResponse = await fetch(pushUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify(pushData)
+            });
+
+            if (pushResponse.ok) {
+                showToast(`✅ Synced ${keys.length} keys to GitHub!`, 'success');
+                return true;
+            } else {
+                const error = await pushResponse.json();
+                showToast(`❌ GitHub Error: ${error.message || 'Unknown'}`, 'error');
+                return false;
+            }
+
+        } catch (error) {
+            showToast(`❌ Sync error: ${error.message}`, 'error');
+            return false;
+        }
+    }
+
+    // ============================================================
+    // KEY GENERATION WITH AUTO-SYNC
+    // ============================================================
 
     function loadKeys() {
         try {
             const data = localStorage.getItem(STORAGE_KEY);
-            if (data) {
-                return JSON.parse(data);
-            }
-        } catch (e) {
-            console.error('Failed to load keys:', e);
-        }
+            if (data) return JSON.parse(data);
+        } catch (e) { console.error('Failed to load keys:', e); }
         return [];
     }
 
@@ -731,10 +686,6 @@
         updateStats(keys);
         renderTable(keys);
     }
-
-    // ============================================================
-    // KEY GENERATION
-    // ============================================================
 
     function generateNexoKey() {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -745,7 +696,7 @@
         return result;
     }
 
-    function generateKey() {
+    async function generateKey() {
         const duration = parseInt(document.getElementById('durationSelect').value);
         const customKey = document.getElementById('customKeyInput').value.trim().toUpperCase();
 
@@ -782,10 +733,17 @@
 
         document.getElementById('customKeyInput').value = '';
         showToast(`✅ Key generated: ${key} (${duration} days)`, 'success');
-        
+
+        // 🔥 AUTO-SYNC: Key generate karte hi GitHub pe push ho jayega!
         const btn = document.getElementById('genBtnText');
-        btn.innerHTML = '✅ Generated!';
-        setTimeout(() => { btn.innerHTML = '⚡ Generate Key'; }, 1500);
+        btn.innerHTML = '⏳ Syncing...';
+        btn.disabled = true;
+
+        const synced = await syncToGitHub(keys);
+
+        btn.innerHTML = synced ? '✅ Synced!' : '⚠️ Sync failed';
+        btn.disabled = false;
+        setTimeout(() => { btn.innerHTML = '⚡ Generate Key'; }, 2000);
     }
 
     function quickGenerate(days) {
@@ -793,7 +751,7 @@
         generateKey();
     }
 
-    function bulkGenerate() {
+    async function bulkGenerate() {
         const count = parseInt(document.getElementById('bulkCount').value) || 5;
         const duration = parseInt(document.getElementById('bulkDuration').value);
         const keys = loadKeys();
@@ -824,35 +782,23 @@
         }
 
         saveKeys(keys);
-        showToast(`✅ Generated ${generated.length} keys (${duration} days each)`, 'success');
+        showToast(`✅ Generated ${generated.length} keys`, 'success');
+
+        // 🔥 Bulk generate ke baad auto-sync
+        await syncToGitHub(keys);
     }
 
     // ============================================================
-    // 🔥 SYNC TO JSON - Download keys.json for GitHub upload
+    // MANUAL SYNC
     // ============================================================
 
-    function syncKeysToJSON() {
+    async function manualSyncToGitHub() {
         const keys = loadKeys();
         if (keys.length === 0) {
-            showToast('❌ No keys to sync! Generate at least one key.', 'error');
+            showToast('❌ No keys to sync!', 'error');
             return;
         }
-
-        // 🔥 Format with proper indentation
-        const jsonStr = JSON.stringify(keys, null, 2);
-        
-        // 🔥 Download as keys.json
-        const blob = new Blob([jsonStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'keys.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        showToast(`✅ keys.json downloaded! Contains ${keys.length} keys. Upload to GitHub repo.`, 'success');
+        await syncToGitHub(keys);
     }
 
     // ============================================================
@@ -863,13 +809,8 @@
         const keys = loadKeys();
         const found = keys.find(k => k.key === key);
 
-        if (!found) {
-            return { valid: false, reason: 'Key not found' };
-        }
-
-        if (found.status === 'used') {
-            return { valid: false, reason: 'Key already used' };
-        }
+        if (!found) return { valid: false, reason: 'Key not found' };
+        if (found.status === 'used') return { valid: false, reason: 'Key already used' };
 
         const now = new Date();
         const expires = new Date(found.expires);
@@ -887,27 +828,6 @@
         };
     }
 
-    function markKeyUsed(key, userIdentifier) {
-        const keys = loadKeys();
-        const found = keys.find(k => k.key === key);
-
-        if (!found) return false;
-        if (found.status !== 'active') return false;
-
-        const now = new Date();
-        if (new Date(found.expires) < now) {
-            found.status = 'expired';
-            saveKeys(keys);
-            return false;
-        }
-
-        found.status = 'used';
-        found.usedBy = userIdentifier || 'Unknown';
-        found.usedAt = now.toISOString();
-        saveKeys(keys);
-        return true;
-    }
-
     // ============================================================
     // RENDER TABLE
     // ============================================================
@@ -918,14 +838,8 @@
         const statusFilter = document.getElementById('statusFilter').value;
 
         let filtered = keys;
-
-        if (search) {
-            filtered = filtered.filter(k => k.key.toLowerCase().includes(search));
-        }
-
-        if (statusFilter !== 'all') {
-            filtered = filtered.filter(k => k.status === statusFilter);
-        }
+        if (search) filtered = filtered.filter(k => k.key.toLowerCase().includes(search));
+        if (statusFilter !== 'all') filtered = filtered.filter(k => k.status === statusFilter);
 
         if (filtered.length === 0) {
             tbody.innerHTML = `
@@ -984,10 +898,6 @@
         }).join('');
     }
 
-    // ============================================================
-    // STATS
-    // ============================================================
-
     function updateStats(keys) {
         const total = keys.length;
         const active = keys.filter(k => k.status === 'active').length;
@@ -1004,13 +914,13 @@
     // ACTIONS
     // ============================================================
 
-    // 🔥 DELETE KEY - Full working
-    function deleteKey(key) {
+    async function deleteKey(key) {
         if (!confirm(`🗑️ Delete key: ${key}?`)) return;
         let keys = loadKeys();
         keys = keys.filter(k => k.key !== key);
         saveKeys(keys);
         showToast(`🗑️ Deleted: ${key}`, 'info');
+        await syncToGitHub(keys);
     }
 
     function copyKey(key) {
@@ -1027,11 +937,12 @@
         });
     }
 
-    function clearAllKeys() {
+    async function clearAllKeys() {
         if (!confirm('⚠️ Delete ALL keys? This cannot be undone!')) return;
         if (!confirm('Are you absolutely sure?')) return;
         saveKeys([]);
         showToast('🗑️ All keys deleted', 'info');
+        await syncToGitHub([]);
     }
 
     function refreshTable() {
@@ -1052,20 +963,14 @@
 
     function exportKeys() {
         const keys = loadKeys();
-        if (keys.length === 0) {
-            showToast('❌ No keys to export', 'error');
-            return;
-        }
+        if (keys.length === 0) { showToast('❌ No keys to export', 'error'); return; }
         downloadJson(keys, 'nexo_keys_all.json');
         showToast(`📥 Exported ${keys.length} keys`, 'success');
     }
 
     function exportActiveKeys() {
         const keys = loadKeys().filter(k => k.status === 'active');
-        if (keys.length === 0) {
-            showToast('❌ No active keys to export', 'error');
-            return;
-        }
+        if (keys.length === 0) { showToast('❌ No active keys', 'error'); return; }
         downloadJson(keys, 'nexo_keys_active.json');
         showToast(`📥 Exported ${keys.length} active keys`, 'success');
     }
@@ -1092,7 +997,6 @@
         toast.className = `toast toast-${type}`;
         toast.textContent = message;
         container.appendChild(toast);
-
         setTimeout(() => {
             toast.classList.add('hide');
             setTimeout(() => toast.remove(), 400);
@@ -1106,19 +1010,20 @@
     const initialKeys = loadKeys();
     renderTable(initialKeys);
     updateStats(initialKeys);
+    updateTokenStatus();
 
     window.NexoAPI = {
         validateKey: validateKey,
-        markKeyUsed: markKeyUsed,
         getAllKeys: loadKeys,
         generateKey: generateKey,
-        syncKeysToJSON: syncKeysToJSON,
+        syncToGitHub: syncToGitHub,
         deleteKey: deleteKey
     };
 
-    console.log('🔐 NEXO Admin Panel loaded successfully!');
+    console.log('🔐 NEXO Admin Panel - Auto-Sync Mode');
     console.log('📊 Total keys:', initialKeys.length);
-    console.log('💡 API available: window.NexoAPI');
+    console.log('🔑 Token:', getToken() ? '✅ Set' : '❌ Not set');
+    console.log('💡 Key generate karte hi GitHub pe auto-push ho jayega!');
 </script>
 
 </body>
