@@ -1,0 +1,11 @@
+[
+  {
+    "key": "NEXO-MANUAL001",
+    "duration": 30,
+    "status": "active",
+    "created": "2026-06-30T10:00:00.000Z",
+    "expires": "2026-07-30T10:00:00.000Z",
+    "usedBy": null,
+    "usedAt": null
+  }
+]
