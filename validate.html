@@ -1,53 +1,42 @@
-<!DOCTYPE html>
-<html>
-<body>
 <script>
-// 🔥 SIRF JSON RETURN KAREGA - Koi HTML nahi!
-const params = new URLSearchParams(window.location.search);
-const key = params.get('key');
+// 🔥 SIRF JSON - Koi HTML nahi!
+const key = new URLSearchParams(location.search).get('key');
 
 async function loadKeys() {
     try {
-        const response = await fetch('keys.json?t=' + Date.now());
-        if (!response.ok) throw new Error('keys.json not found');
-        const data = await response.json();
-        return Array.isArray(data) ? data : [data];
-    } catch (e) {
-        return null;
-    }
+        const r = await fetch('keys.json?t=' + Date.now());
+        if (!r.ok) throw Error('keys.json not found');
+        const d = await r.json();
+        return Array.isArray(d) ? d : [d];
+    } catch (e) { return null; }
 }
 
-async function validateKey(key) {
+async function validateKey(k) {
     const keys = await loadKeys();
     if (!keys) return { valid: false, reason: 'Failed to load keys.json' };
-    if (keys.length === 0) return { valid: false, reason: 'No keys found' };
+    if (!keys.length) return { valid: false, reason: 'No keys found' };
     
-    const found = keys.find(k => k.key.toUpperCase() === key.toUpperCase());
+    const found = keys.find(x => x.key.toUpperCase() === k.toUpperCase());
     if (!found) return { valid: false, reason: 'Key not found' };
     if (found.status === 'used') return { valid: false, reason: 'Key already used' };
     
-    const now = new Date();
-    const expires = new Date(found.expires);
-    if (now > expires) return { valid: false, reason: 'Key expired' };
+    const now = Date.now();
+    const exp = new Date(found.expires).getTime();
+    if (now > exp) return { valid: false, reason: 'Key expired' };
     
     return {
         valid: true,
         key: found.key,
         duration: found.duration,
         expires: found.expires,
-        days_left: Math.ceil((expires - now) / (1000 * 60 * 60 * 24))
+        days_left: Math.ceil((exp - now) / 86400000)
     };
 }
 
 if (key) {
-    validateKey(key).then(result => {
-        document.write(JSON.stringify(result));
-    }).catch(err => {
-        document.write(JSON.stringify({ valid: false, reason: err.message }));
-    });
+    validateKey(key).then(r => document.write(JSON.stringify(r)))
+                    .catch(e => document.write(JSON.stringify({ valid: false, reason: e.message })));
 } else {
     document.write(JSON.stringify({ valid: false, reason: 'No key provided' }));
 }
 </script>
-</body>
-</html>
