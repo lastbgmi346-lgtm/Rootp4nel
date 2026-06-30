@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NEXO Admin Panel - Login</title>
+    <title>NEXO Admin Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -13,9 +13,6 @@
             background: #0a0a12;
             color: #ffffff;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             background-image: 
                 radial-gradient(ellipse at 50% 0%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
                 radial-gradient(ellipse at 50% 100%, rgba(112, 0, 255, 0.05) 0%, transparent 50%);
@@ -31,6 +28,7 @@
             width: 100%;
             backdrop-filter: blur(12px);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            margin: 20px auto;
             display: none;
         }
 
@@ -127,10 +125,6 @@
             box-shadow: 0 6px 30px rgba(112, 0, 255, 0.4);
         }
 
-        .login-btn:active {
-            transform: translateY(0);
-        }
-
         .login-error {
             color: #ff0044;
             font-size: 13px;
@@ -155,19 +149,20 @@
         /* ===== MAIN ADMIN PANEL ===== */
         #adminPanel {
             display: none;
+            padding: 20px;
         }
 
         #adminPanel.active {
             display: block;
         }
 
-        /* ===== ORIGINAL STYLES (unchanged) ===== */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #14141e; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00e5ff, #7000ff); border-radius: 10px; }
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-        .container { max-width: 1400px; margin: 0 auto; }
-
+        /* ===== HEADER ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -207,6 +202,18 @@
             font-size: 12px;
             color: #8e8e9f;
             font-weight: 300;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .user-email {
+            color: #00ff88;
+            font-size: 12px;
         }
 
         .logout-btn {
@@ -250,6 +257,7 @@
             letter-spacing: 1px;
         }
 
+        /* ===== GEN PANEL ===== */
         .gen-panel {
             background: rgba(20, 20, 30, 0.8);
             border-radius: 16px;
@@ -268,6 +276,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
         .gen-title span {
             color: #8e8e9f;
@@ -300,6 +309,7 @@
         .gen-row input { min-width: 250px; flex: 1; }
         .gen-row input::placeholder { color: #505066; }
 
+        /* ===== BUTTONS ===== */
         .btn {
             padding: 12px 30px;
             border: none;
@@ -347,6 +357,7 @@
         }
         .btn-github:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(110, 84, 148, 0.4); }
 
+        /* ===== QUICK TYPES ===== */
         .quick-types {
             display: flex;
             gap: 8px;
@@ -367,6 +378,7 @@
         .quick-type:hover { border-color: #7000ff; color: #fff; background: rgba(112, 0, 255, 0.1); }
         .quick-type.active { border-color: #00e5ff; color: #00e5ff; background: rgba(0, 229, 255, 0.08); }
 
+        /* ===== BULK OPTIONS ===== */
         .bulk-options {
             display: flex;
             gap: 10px;
@@ -387,6 +399,7 @@
         }
         .bulk-options input:focus { border-color: #7000ff; outline: none; }
 
+        /* ===== EXPORT SECTION ===== */
         .export-section {
             display: flex;
             gap: 10px;
@@ -397,6 +410,7 @@
         }
         .export-section .btn { font-size: 12px; padding: 8px 20px; }
 
+        /* ===== TABLE ===== */
         .table-container {
             background: rgba(20, 20, 30, 0.8);
             border-radius: 16px;
@@ -512,6 +526,7 @@
         .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
         .empty-state h3 { color: #8e8e9f; margin-bottom: 8px; }
 
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -533,6 +548,7 @@
         .toast.hide { animation: slideOut 0.3s ease forwards; }
         @keyframes slideOut { from { opacity: 1; transform: translateY(30px); } to { opacity: 0; transform: translateY(30px); } }
 
+        /* ===== TOKEN SECTION ===== */
         .token-section {
             display: flex;
             gap: 10px;
@@ -552,7 +568,7 @@
             color: #fff;
             font-size: 13px;
             outline: none;
-            min-width: 300px;
+            min-width: 250px;
         }
         .token-section input:focus { border-color: #7000ff; }
         .token-section input::placeholder { color: #505066; }
@@ -565,10 +581,12 @@
         .token-status.active { color: #00ff88; }
         .token-status.inactive { color: #ff0044; }
 
+        /* ===== DURATION TYPE ===== */
         .duration-type {
             display: flex;
             gap: 8px;
             margin: 10px 0;
+            flex-wrap: wrap;
         }
         .duration-type .btn {
             padding: 8px 20px;
@@ -579,26 +597,86 @@
             color: #fff;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .header { flex-direction: column; align-items: stretch; text-align: center; }
-            .header-stats { justify-content: center; }
-            .gen-row { flex-direction: column; }
-            .gen-row select, .gen-row input { width: 100%; min-width: unset; }
-            .table-header { flex-direction: column; align-items: stretch; }
-            .table-actions { flex-direction: column; }
-            .search-box { width: 100%; }
-            .toast { left: 20px; right: 20px; bottom: 20px; }
-            .token-section { flex-direction: column; }
-            .token-section input { min-width: unset; }
-            .login-container { padding: 30px 25px; margin: 20px; }
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .header-stats {
+                justify-content: center;
+            }
+            .header-right {
+                justify-content: center;
+            }
+            .gen-row {
+                flex-direction: column;
+            }
+            .gen-row select, .gen-row input {
+                width: 100%;
+                min-width: unset;
+            }
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .table-actions {
+                flex-direction: column;
+            }
+            .search-box {
+                width: 100%;
+            }
+            .toast {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+            }
+            .token-section {
+                flex-direction: column;
+            }
+            .token-section input {
+                min-width: unset;
+            }
+            .login-container {
+                padding: 30px 25px;
+                margin: 20px;
+            }
+            .gen-panel {
+                padding: 20px 15px;
+            }
+            .header {
+                padding: 15px 20px;
+            }
+            .export-section .btn {
+                font-size: 10px;
+                padding: 6px 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stat-item {
+                padding: 5px 10px;
+            }
+            .stat-number {
+                font-size: 16px;
+            }
+            .stat-label {
+                font-size: 8px;
+            }
+            .header-stats {
+                gap: 10px;
+            }
+            .quick-type {
+                font-size: 9px;
+                padding: 4px 10px;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- ============================================================ -->
-<!-- LOGIN CONTAINER -->
-<!-- ============================================================ -->
+<!-- ===== LOGIN CONTAINER ===== -->
 <div class="login-container active" id="loginContainer">
     <div class="login-logo">
         <div class="icon">◆</div>
@@ -609,12 +687,12 @@
     <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
         <div class="input-group">
             <label>📧 Email Address</label>
-            <input type="email" id="loginEmail" placeholder="Enter your email" value="" required />
+            <input type="email" id="loginEmail" placeholder="Enter your email" required />
         </div>
 
         <div class="input-group">
             <label>🔒 Password</label>
-            <input type="password" id="loginPassword" placeholder="Enter your password" value="" required />
+            <input type="password" id="loginPassword" placeholder="Enter your password" required />
         </div>
 
         <button type="submit" class="login-btn">🔐 Login to Admin Panel</button>
@@ -627,9 +705,7 @@
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MAIN ADMIN PANEL (Hidden until login) -->
-<!-- ============================================================ -->
+<!-- ===== MAIN ADMIN PANEL ===== -->
 <div id="adminPanel">
 <div class="container">
 
@@ -641,29 +717,30 @@
                 <div class="logo-sub">Auto-Delete v4.0</div>
             </div>
         </div>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <span style="color:#00ff88; font-size:12px;" id="loggedInUser">👤 admin</span>
+        <div class="header-right">
+            <span class="user-email" id="loggedInUser">👤 admin</span>
             <button class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
         </div>
-        <div class="header-stats" id="headerStats">
-            <div class="stat-item">
-                <div class="stat-number" id="totalKeys">0</div>
-                <div class="stat-label">Total Keys</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="activeKeys">0</div>
-                <div class="stat-label">Active</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="expiredKeys">0</div>
-                <div class="stat-label">Expired</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="usedKeys">0</div>
-                <div class="stat-label">Used</div>
-            </div>
-        </div>
     </header>
+
+    <div class="header-stats" id="headerStats">
+        <div class="stat-item">
+            <div class="stat-number" id="totalKeys">0</div>
+            <div class="stat-label">Total Keys</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="activeKeys">0</div>
+            <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="expiredKeys">0</div>
+            <div class="stat-label">Expired</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="usedKeys">0</div>
+            <div class="stat-label">Used</div>
+        </div>
+    </div>
 
     <div class="gen-panel">
         <div class="gen-title">
@@ -672,9 +749,9 @@
         </div>
 
         <div class="duration-type">
-            <button class="btn active" id="durMinutes" onclick="setDurationType('minutes')" style="padding:8px 20px; font-size:12px;">⏱️ Minutes</button>
-            <button class="btn" id="durHours" onclick="setDurationType('hours')" style="padding:8px 20px; font-size:12px;">⏰ Hours</button>
-            <button class="btn" id="durDays" onclick="setDurationType('days')" style="padding:8px 20px; font-size:12px;">📅 Days</button>
+            <button class="btn active" id="durMinutes" onclick="setDurationType('minutes')">⏱️ Minutes</button>
+            <button class="btn" id="durHours" onclick="setDurationType('hours')">⏰ Hours</button>
+            <button class="btn" id="durDays" onclick="setDurationType('days')">📅 Days</button>
         </div>
 
         <div class="token-section">
@@ -749,10 +826,10 @@
         </div>
 
         <div class="export-section">
-            <button class="btn btn-outline" onclick="exportKeys()" style="font-size:12px; padding:8px 20px;">📥 Export All</button>
-            <button class="btn btn-outline" onclick="exportActiveKeys()" style="font-size:12px; padding:8px 20px;">📥 Export Active</button>
-            <button class="btn btn-sync" onclick="manualSyncToGitHub()" style="font-size:12px; padding:8px 20px;">🔄 Manual Sync</button>
-            <button class="btn btn-danger" onclick="clearAllKeys()" style="font-size:12px; padding:8px 20px;">🗑️ Clear All</button>
+            <button class="btn btn-outline" onclick="exportKeys()">📥 Export All</button>
+            <button class="btn btn-outline" onclick="exportActiveKeys()">📥 Export Active</button>
+            <button class="btn btn-sync" onclick="manualSyncToGitHub()">🔄 Manual Sync</button>
+            <button class="btn btn-danger" onclick="clearAllKeys()">🗑️ Clear All</button>
         </div>
     </div>
 
@@ -816,12 +893,10 @@
         if (email === VALID_EMAIL && password === VALID_PASSWORD) {
             errorEl.classList.remove('show');
             
-            // ✅ Login success - show admin panel
             document.getElementById('loginContainer').classList.remove('active');
             document.getElementById('adminPanel').classList.add('active');
             document.getElementById('loggedInUser').textContent = '👤 ' + email;
             
-            // Initialize admin panel
             initializeAdminPanel();
             
             showToast('✅ Login successful! Welcome Admin.', 'success');
@@ -839,19 +914,10 @@
         if (confirm('Are you sure you want to logout?')) {
             document.getElementById('adminPanel').classList.remove('active');
             document.getElementById('loginContainer').classList.add('active');
-            document.getElementById('loginEmail').value = 'nexomods@gmail.com';
-            document.getElementById('loginPassword').value = '99059';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
             showToast('🔒 Logged out successfully', 'info');
         }
-    }
-
-    // ============================================================
-    // 🔥 CHECK LOGIN STATUS ON PAGE LOAD
-    // ============================================================
-    function checkLoginStatus() {
-        // Always show login first
-        document.getElementById('loginContainer').classList.add('active');
-        document.getElementById('adminPanel').classList.remove('active');
     }
 
     // ============================================================
@@ -1413,8 +1479,6 @@
     // PAGE LOAD - Show Login
     // ============================================================
 
-    checkLoginStatus();
-
     // Expose functions globally
     window.NexoAPI = {
         getAllKeys: loadKeys,
@@ -1422,6 +1486,10 @@
         syncToGitHub: syncToGitHub,
         deleteKey: deleteKey
     };
+
+    console.log('🔐 NEXO Admin Panel - Login System Active');
+    console.log('📧 Email: nexomods@gmail.com');
+    console.log('🔒 Password: 99059');
 </script>
 
 </body>
