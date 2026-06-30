@@ -31,25 +31,20 @@
     </style>
 </head>
 <body>
-    <pre id="output" class="loading">⏳ Loading...</pre>
+    <pre id="output" class="loading">⏳ Validating...</pre>
 
     <script>
-        // ============================================
-        // COMPLETE VALIDATION CODE
-        // ============================================
-
         const output = document.getElementById('output');
 
         // 🔥 Load keys from keys.json
         async function loadKeys() {
             try {
-                const response = await fetch('keys.json');
+                const response = await fetch('keys.json?t=' + Date.now());
                 if (!response.ok) {
                     throw new Error('keys.json not found (HTTP ' + response.status + ')');
                 }
                 const data = await response.json();
                 
-                // 🔥 Agar single object hai toh array mein convert karein
                 if (!Array.isArray(data)) {
                     return [data];
                 }
@@ -60,47 +55,45 @@
             }
         }
 
+        // 🔥 Case-insensitive key search
+        function findKey(keys, key) {
+            const upperKey = key.toUpperCase();
+            return keys.find(k => k.key.toUpperCase() === upperKey);
+        }
+
         // 🔥 Main validation function
         async function validateKey(key) {
-            // Step 1: Load keys
             const keys = await loadKeys();
             if (!keys) {
                 return { valid: false, reason: 'Failed to load keys.json' };
             }
 
             if (keys.length === 0) {
-                return { valid: false, reason: 'No keys found in database' };
+                return { valid: false, reason: 'No keys in database' };
             }
 
-            // Step 2: Search for key
-            const found = keys.find(k => k.key === key);
+            // 🔥 Case-insensitive search
+            const found = findKey(keys, key);
             if (!found) {
                 return { 
                     valid: false, 
                     reason: 'Key not found',
-                    available_keys: keys.map(k => k.key) // Debug info
+                    available_keys: keys.map(k => k.key)
                 };
             }
 
-            // Step 3: Check status
             if (found.status === 'used') {
                 return { valid: false, reason: 'Key already used' };
             }
 
-            // Step 4: Check expiry
             const now = new Date();
             const expires = new Date(found.expires);
             
             if (now > expires) {
-                // Update status to expired
                 found.status = 'expired';
-                try {
-                    localStorage.setItem('nexo_keys_data', JSON.stringify(keys));
-                } catch (e) {}
                 return { valid: false, reason: 'Key expired' };
             }
 
-            // ✅ Key is valid!
             const daysLeft = Math.ceil((expires - now) / (1000 * 60 * 60 * 24));
             return {
                 valid: true,
@@ -112,10 +105,7 @@
             };
         }
 
-        // ============================================
-        // URL SE KEY READ KAREIN
-        // ============================================
-
+        // 🔥 URL se key read karein
         const params = new URLSearchParams(window.location.search);
         const key = params.get('key');
 
@@ -126,27 +116,16 @@
                 return;
             }
 
-            output.className = 'loading';
-            output.textContent = '⏳ Validating key: ' + key + '...';
-
             try {
                 const result = await validateKey(key);
-                
-                if (result.valid) {
-                    output.className = 'success';
-                } else {
-                    output.className = 'error';
-                }
-                
+                output.className = result.valid ? 'success' : 'error';
                 output.textContent = JSON.stringify(result, null, 2);
-                
             } catch (error) {
                 output.className = 'error';
                 output.textContent = '❌ Error: ' + error.message;
             }
         }
 
-        // 🔥 Run
         main();
     </script>
 </body>
