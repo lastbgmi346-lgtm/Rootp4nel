@@ -1002,6 +1002,31 @@
     // ACTIONS
     // ============================================================
 
+    // 🔥 ADMIN PANEL MEIN ADD KAREIN - JSON file download/sync
+function syncKeysToJSON() {
+    const keys = loadKeys();
+    if (keys.length === 0) {
+        showToast('❌ No keys to sync', 'error');
+        return;
+    }
+    
+    // Download as JSON file
+    const blob = new Blob([JSON.stringify(keys, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'keys.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showToast(`✅ keys.json downloaded! Upload to GitHub repo.`, 'success');
+}
+
+// 🔥 Export button mein yeh add karein
+// <button class="btn btn-primary" onclick="syncKeysToJSON()">📤 Sync to JSON</button>
+
     function deleteKey(key) {
         if (!confirm(`Delete key: ${key}?`)) return;
         let keys = loadKeys();
