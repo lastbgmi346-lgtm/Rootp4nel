@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NEXO Admin Panel - Auto Sync</title>
+    <title>NEXO Admin Panel - Auto-Sync</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -325,6 +325,13 @@
             padding: 2px 10px;
             border-radius: 4px;
         }
+        .badge-minutes {
+            font-size: 11px;
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            padding: 2px 10px;
+            border-radius: 4px;
+        }
 
         .action-btns { display: flex; gap: 6px; }
         .action-btn {
@@ -366,7 +373,6 @@
         .toast.hide { animation: slideOut 0.3s ease forwards; }
         @keyframes slideOut { from { opacity: 1; transform: translateY(30px); } to { opacity: 0; transform: translateY(30px); } }
 
-        /* GitHub Token Input */
         .token-section {
             display: flex;
             gap: 10px;
@@ -399,6 +405,21 @@
         .token-status.active { color: #00ff88; }
         .token-status.inactive { color: #ff0044; }
 
+        /* 🔥 New Duration Type Selector */
+        .duration-type {
+            display: flex;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .duration-type .btn {
+            padding: 8px 20px;
+            font-size: 12px;
+        }
+        .duration-type .btn.active {
+            background: linear-gradient(135deg, #00e5ff, #7000ff);
+            color: #fff;
+        }
+
         @media (max-width: 768px) {
             .header { flex-direction: column; align-items: stretch; text-align: center; }
             .header-stats { justify-content: center; }
@@ -417,13 +438,12 @@
 
 <div class="container">
 
-    <!-- ===== HEADER ===== -->
     <header class="header">
         <div class="logo">
             <span class="logo-icon">◆</span>
             <div>
                 <div class="logo-text">NEXO ADMIN</div>
-                <div class="logo-sub">Auto-Sync v3.0</div>
+                <div class="logo-sub">Auto-Delete v4.0</div>
             </div>
         </div>
         <div class="header-stats" id="headerStats">
@@ -446,35 +466,52 @@
         </div>
     </header>
 
-    <!-- ===== KEY GENERATION PANEL ===== -->
     <div class="gen-panel">
         <div class="gen-title">
             🔑 Generate New Key
-            <span>— Auto-sync to GitHub</span>
+            <span>— Auto-sync & Auto-delete</span>
         </div>
 
-        <!-- ===== TOKEN SETUP ===== -->
+        <!-- 🔥 NEW: Duration Type Selector -->
+        <div class="duration-type">
+            <button class="btn active" id="durMinutes" onclick="setDurationType('minutes')" style="padding:8px 20px; font-size:12px;">⏱️ Minutes</button>
+            <button class="btn" id="durHours" onclick="setDurationType('hours')" style="padding:8px 20px; font-size:12px;">⏰ Hours</button>
+            <button class="btn" id="durDays" onclick="setDurationType('days')" style="padding:8px 20px; font-size:12px;">📅 Days</button>
+        </div>
+
         <div class="token-section">
             <input type="password" id="githubToken" placeholder="Enter GitHub Personal Access Token (ghp_xxxxx)" />
-            <button class="btn btn-github" onclick="saveToken()" style="padding:8px 20px; font-size:12px;">
-                🔐 Save Token
-            </button>
+            <button class="btn btn-github" onclick="saveToken()" style="padding:8px 20px; font-size:12px;">🔐 Save Token</button>
             <span class="token-status inactive" id="tokenStatus">⚠️ Token not set</span>
         </div>
 
         <div class="gen-row" style="margin-top:15px;">
             <select id="durationSelect">
-                <option value="1">1 Day</option>
-                <option value="2">2 Days</option>
-                <option value="3">3 Days</option>
-                <option value="5">5 Days</option>
-                <option value="7">7 Days (1 Week)</option>
-                <option value="14">14 Days (2 Weeks)</option>
-                <option value="30" selected>30 Days (1 Month)</option>
-                <option value="60">60 Days (2 Months)</option>
-                <option value="90">90 Days (3 Months)</option>
-                <option value="180">180 Days (6 Months)</option>
-                <option value="365">365 Days (1 Year)</option>
+                <!-- Minutes -->
+                <option value="1" data-type="minutes">1 Minute</option>
+                <option value="5" data-type="minutes">5 Minutes</option>
+                <option value="10" data-type="minutes">10 Minutes</option>
+                <option value="15" data-type="minutes">15 Minutes</option>
+                <option value="30" data-type="minutes">30 Minutes</option>
+                <option value="45" data-type="minutes">45 Minutes</option>
+                <!-- Hours -->
+                <option value="1" data-type="hours">1 Hour</option>
+                <option value="2" data-type="hours">2 Hours</option>
+                <option value="3" data-type="hours">3 Hours</option>
+                <option value="6" data-type="hours">6 Hours</option>
+                <option value="12" data-type="hours">12 Hours</option>
+                <!-- Days -->
+                <option value="1" data-type="days">1 Day</option>
+                <option value="2" data-type="days">2 Days</option>
+                <option value="3" data-type="days">3 Days</option>
+                <option value="5" data-type="days">5 Days</option>
+                <option value="7" data-type="days">7 Days (1 Week)</option>
+                <option value="14" data-type="days">14 Days (2 Weeks)</option>
+                <option value="30" data-type="days" selected>30 Days (1 Month)</option>
+                <option value="60" data-type="days">60 Days (2 Months)</option>
+                <option value="90" data-type="days">90 Days (3 Months)</option>
+                <option value="180" data-type="days">180 Days (6 Months)</option>
+                <option value="365" data-type="days">365 Days (1 Year)</option>
             </select>
 
             <input type="text" id="customKeyInput" placeholder="Custom key (optional, leave empty for auto-generate)" />
@@ -486,12 +523,15 @@
 
         <div class="quick-types">
             <span style="color:#505066; font-size:11px; margin-right:8px;">Quick:</span>
-            <span class="quick-type" onclick="quickGenerate(1)">1 Day</span>
-            <span class="quick-type" onclick="quickGenerate(3)">3 Days</span>
-            <span class="quick-type" onclick="quickGenerate(7)">1 Week</span>
-            <span class="quick-type active" onclick="quickGenerate(30)">1 Month</span>
-            <span class="quick-type" onclick="quickGenerate(90)">3 Months</span>
-            <span class="quick-type" onclick="quickGenerate(365)">1 Year</span>
+            <span class="quick-type" onclick="quickGenerate(5, 'minutes')">5 Min</span>
+            <span class="quick-type" onclick="quickGenerate(15, 'minutes')">15 Min</span>
+            <span class="quick-type" onclick="quickGenerate(30, 'minutes')">30 Min</span>
+            <span class="quick-type" onclick="quickGenerate(1, 'hours')">1 Hour</span>
+            <span class="quick-type" onclick="quickGenerate(2, 'hours')">2 Hours</span>
+            <span class="quick-type" onclick="quickGenerate(6, 'hours')">6 Hours</span>
+            <span class="quick-type" onclick="quickGenerate(1, 'days')">1 Day</span>
+            <span class="quick-type active" onclick="quickGenerate(30, 'days')">1 Month</span>
+            <span class="quick-type" onclick="quickGenerate(365, 'days')">1 Year</span>
         </div>
 
         <div class="bulk-options">
@@ -499,10 +539,16 @@
             <input type="number" id="bulkCount" value="5" min="1" max="50" />
             <span style="color:#505066; font-size:12px;">keys of</span>
             <select id="bulkDuration" style="padding:6px 12px; border-radius:6px; background:#0a0a12; color:#fff; border:1px solid rgba(255,255,255,0.06);">
-                <option value="1">1 Day</option>
-                <option value="7">7 Days</option>
-                <option value="30" selected>30 Days</option>
-                <option value="90">90 Days</option>
+                <option value="5" data-type="minutes">5 Minutes</option>
+                <option value="15" data-type="minutes">15 Minutes</option>
+                <option value="30" data-type="minutes">30 Minutes</option>
+                <option value="1" data-type="hours">1 Hour</option>
+                <option value="2" data-type="hours">2 Hours</option>
+                <option value="6" data-type="hours">6 Hours</option>
+                <option value="1" data-type="days">1 Day</option>
+                <option value="7" data-type="days">7 Days</option>
+                <option value="30" data-type="days" selected>30 Days</option>
+                <option value="90" data-type="days">90 Days</option>
             </select>
             <button class="btn btn-success" onclick="bulkGenerate()" style="padding:8px 20px; font-size:12px;">Generate Bulk</button>
         </div>
@@ -510,17 +556,14 @@
         <div class="export-section">
             <button class="btn btn-outline" onclick="exportKeys()" style="font-size:12px; padding:8px 20px;">📥 Export All</button>
             <button class="btn btn-outline" onclick="exportActiveKeys()" style="font-size:12px; padding:8px 20px;">📥 Export Active</button>
-            <button class="btn btn-sync" onclick="manualSyncToGitHub()" style="font-size:12px; padding:8px 20px;">
-                🔄 Manual Sync to GitHub
-            </button>
+            <button class="btn btn-sync" onclick="manualSyncToGitHub()" style="font-size:12px; padding:8px 20px;">🔄 Manual Sync</button>
             <button class="btn btn-danger" onclick="clearAllKeys()" style="font-size:12px; padding:8px 20px;">🗑️ Clear All</button>
         </div>
     </div>
 
-    <!-- ===== TABLE ===== -->
     <div class="table-container">
         <div class="table-header">
-            <h2>📋 Key Database</h2>
+            <h2>📋 Key Database <span id="autoDeleteStatus" style="font-size:12px; color:#00ff88;"></span></h2>
             <div class="table-actions">
                 <input type="text" class="search-box" id="searchInput" placeholder="🔍 Search keys..." oninput="filterTable()" />
                 <select id="statusFilter" onchange="filterTable()" style="padding:8px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:#0a0a12; color:#fff; font-size:13px; outline:none;">
@@ -543,7 +586,7 @@
                         <th>Status</th>
                         <th>Created</th>
                         <th>Expires</th>
-                        <th>Used By</th>
+                        <th>Time Left</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -554,7 +597,6 @@
 
 </div>
 
-<!-- ===== TOAST ===== -->
 <div id="toastContainer"></div>
 
 <script>
@@ -565,11 +607,36 @@
     const STORAGE_KEY = 'nexo_keys_data';
     const TOKEN_KEY = 'github_token';
     
-    // 🔥 CHANGE THESE VALUES
     const GITHUB_OWNER = 'lastbgmi346-lgtm';
     const GITHUB_REPO = 'Rootp4nel';
     const GITHUB_PATH = 'keys.json';
     const GITHUB_BRANCH = 'main';
+
+    let currentDurationType = 'days';
+    let autoDeleteInterval = null;
+
+    // ============================================================
+    // DURATION TYPE
+    // ============================================================
+
+    function setDurationType(type) {
+        currentDurationType = type;
+        document.querySelectorAll('.duration-type .btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('dur' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active');
+        
+        // Update dropdown
+        const select = document.getElementById('durationSelect');
+        for (let opt of select.options) {
+            opt.style.display = opt.dataset.type === type ? 'block' : 'none';
+        }
+        // Select first visible option
+        for (let opt of select.options) {
+            if (opt.dataset.type === type) {
+                select.value = opt.value;
+                break;
+            }
+        }
+    }
 
     // ============================================================
     // TOKEN MANAGEMENT
@@ -604,7 +671,7 @@
     }
 
     // ============================================================
-    // 🔥 AUTO-SYNC TO GITHUB - Key generate karte hi push ho jayega!
+    // 🔥 SYNC TO GITHUB
     // ============================================================
 
     async function syncToGitHub(keys) {
@@ -618,7 +685,6 @@
             const jsonContent = JSON.stringify(keys, null, 2);
             const encodedContent = btoa(unescape(encodeURIComponent(jsonContent)));
 
-            // 🔥 Step 1: Get current file SHA
             const getUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
             const getResponse = await fetch(getUrl, {
                 headers: {
@@ -633,16 +699,13 @@
                 sha = data.sha;
             }
 
-            // 🔥 Step 2: Push updated file
             const pushUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
             const pushData = {
                 message: `Auto-sync: Update keys.json (${new Date().toISOString()})`,
                 content: encodedContent,
                 branch: GITHUB_BRANCH
             };
-            if (sha) {
-                pushData.sha = sha;
-            }
+            if (sha) pushData.sha = sha;
 
             const pushResponse = await fetch(pushUrl, {
                 method: 'PUT',
@@ -670,7 +733,38 @@
     }
 
     // ============================================================
-    // KEY GENERATION WITH AUTO-SYNC
+    // 🔥 AUTO-DELETE - Expired keys ko auto delete karega
+    // ============================================================
+
+    function checkAndDeleteExpiredKeys() {
+        const keys = loadKeys();
+        const now = Date.now();
+        let deleted = false;
+        let remainingKeys = [];
+
+        for (let k of keys) {
+            const expTime = new Date(k.expires).getTime();
+            if (now > expTime) {
+                deleted = true;
+                console.log(`🗑️ Auto-deleted expired key: ${k.key}`);
+            } else {
+                remainingKeys.push(k);
+            }
+        }
+
+        if (deleted) {
+            saveKeys(remainingKeys);
+            // 🔥 Sync to GitHub after auto-delete
+            syncToGitHub(remainingKeys);
+            showToast(`🗑️ Auto-deleted expired keys!`, 'info');
+            document.getElementById('autoDeleteStatus').textContent = `🔄 Last auto-delete: ${new Date().toLocaleTimeString()}`;
+        }
+        
+        return deleted;
+    }
+
+    // ============================================================
+    // KEY GENERATION
     // ============================================================
 
     function loadKeys() {
@@ -696,8 +790,39 @@
         return result;
     }
 
+    // 🔥 Get expiry time based on duration type
+    function getExpiryTime(value, type) {
+        const now = new Date();
+        if (type === 'minutes') {
+            now.setMinutes(now.getMinutes() + parseInt(value));
+        } else if (type === 'hours') {
+            now.setHours(now.getHours() + parseInt(value));
+        } else {
+            now.setDate(now.getDate() + parseInt(value));
+        }
+        return now;
+    }
+
+    // 🔥 Get duration label
+    function getDurationLabel(value, type) {
+        if (type === 'minutes') {
+            return value + (value == 1 ? ' Minute' : ' Minutes');
+        } else if (type === 'hours') {
+            return value + (value == 1 ? ' Hour' : ' Hours');
+        } else {
+            if (value == 1) return '1 Day';
+            if (value == 7) return '1 Week';
+            if (value == 30) return '1 Month';
+            if (value == 365) return '1 Year';
+            return value + ' Days';
+        }
+    }
+
     async function generateKey() {
-        const duration = parseInt(document.getElementById('durationSelect').value);
+        const select = document.getElementById('durationSelect');
+        const value = parseInt(select.value);
+        const type = currentDurationType;
+        
         const customKey = document.getElementById('customKeyInput').value.trim().toUpperCase();
 
         let key = customKey;
@@ -715,12 +840,13 @@
         }
 
         const now = new Date();
-        const expires = new Date(now);
-        expires.setDate(expires.getDate() + duration);
+        const expires = getExpiryTime(value, type);
 
         const newKey = {
             key: key,
-            duration: duration,
+            duration: value,
+            durationType: type,
+            durationLabel: getDurationLabel(value, type),
             status: 'active',
             created: now.toISOString(),
             expires: expires.toISOString(),
@@ -732,9 +858,8 @@
         saveKeys(keys);
 
         document.getElementById('customKeyInput').value = '';
-        showToast(`✅ Key generated: ${key} (${duration} days)`, 'success');
+        showToast(`✅ Key generated: ${key} (${getDurationLabel(value, type)})`, 'success');
 
-        // 🔥 AUTO-SYNC: Key generate karte hi GitHub pe push ho jayega!
         const btn = document.getElementById('genBtnText');
         btn.innerHTML = '⏳ Syncing...';
         btn.disabled = true;
@@ -746,14 +871,24 @@
         setTimeout(() => { btn.innerHTML = '⚡ Generate Key'; }, 2000);
     }
 
-    function quickGenerate(days) {
-        document.getElementById('durationSelect').value = days;
+    function quickGenerate(value, type) {
+        currentDurationType = type;
+        setDurationType(type);
+        const select = document.getElementById('durationSelect');
+        for (let opt of select.options) {
+            if (opt.dataset.type === type && parseInt(opt.value) === value) {
+                select.value = opt.value;
+                break;
+            }
+        }
         generateKey();
     }
 
     async function bulkGenerate() {
         const count = parseInt(document.getElementById('bulkCount').value) || 5;
-        const duration = parseInt(document.getElementById('bulkDuration').value);
+        const select = document.getElementById('bulkDuration');
+        const value = parseInt(select.value);
+        const type = select.options[select.selectedIndex].dataset.type;
         const keys = loadKeys();
         const generated = [];
 
@@ -766,12 +901,13 @@
             } while (keys.some(k => k.key === key) && attempts < 100);
 
             const now = new Date();
-            const expires = new Date(now);
-            expires.setDate(expires.getDate() + duration);
+            const expires = getExpiryTime(value, type);
 
             keys.unshift({
                 key: key,
-                duration: duration,
+                duration: value,
+                durationType: type,
+                durationLabel: getDurationLabel(value, type),
                 status: 'active',
                 created: now.toISOString(),
                 expires: expires.toISOString(),
@@ -783,8 +919,6 @@
 
         saveKeys(keys);
         showToast(`✅ Generated ${generated.length} keys`, 'success');
-
-        // 🔥 Bulk generate ke baad auto-sync
         await syncToGitHub(keys);
     }
 
@@ -799,33 +933,6 @@
             return;
         }
         await syncToGitHub(keys);
-    }
-
-    // ============================================================
-    // VALIDATION API
-    // ============================================================
-
-    function validateKey(key) {
-        const keys = loadKeys();
-        const found = keys.find(k => k.key === key);
-
-        if (!found) return { valid: false, reason: 'Key not found' };
-        if (found.status === 'used') return { valid: false, reason: 'Key already used' };
-
-        const now = new Date();
-        const expires = new Date(found.expires);
-
-        if (now > expires) {
-            found.status = 'expired';
-            saveKeys(keys);
-            return { valid: false, reason: 'Key expired' };
-        }
-
-        return { 
-            valid: true, 
-            key: found,
-            expiresIn: Math.ceil((expires - now) / (1000 * 60 * 60 * 24))
-        };
     }
 
     // ============================================================
@@ -859,34 +966,51 @@
         tbody.innerHTML = filtered.map((k, index) => {
             const created = new Date(k.created).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
             const expires = new Date(k.expires).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+            const expTime = new Date(k.expires).getTime();
+            const now = Date.now();
+            const timeLeft = expTime - now;
             
             let statusHtml = '';
+            let timeLeftHtml = '';
+            
             if (k.status === 'active') {
-                const now = new Date();
-                const exp = new Date(k.expires);
-                const daysLeft = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
-                statusHtml = `<span class="status-badge status-active">Active (${daysLeft}d)</span>`;
+                if (timeLeft > 0) {
+                    const days = Math.floor(timeLeft / 86400000);
+                    const hours = Math.floor((timeLeft % 86400000) / 3600000);
+                    const minutes = Math.floor((timeLeft % 3600000) / 60000);
+                    
+                    if (days > 0) {
+                        timeLeftHtml = `${days}d ${hours}h`;
+                    } else if (hours > 0) {
+                        timeLeftHtml = `${hours}h ${minutes}m`;
+                    } else {
+                        timeLeftHtml = `${minutes}m`;
+                    }
+                    statusHtml = `<span class="status-badge status-active">Active</span>`;
+                } else {
+                    statusHtml = `<span class="status-badge status-expired">Expired</span>`;
+                    timeLeftHtml = 'Expired';
+                }
             } else if (k.status === 'expired') {
                 statusHtml = `<span class="status-badge status-expired">Expired</span>`;
+                timeLeftHtml = 'Expired';
             } else {
                 statusHtml = `<span class="status-badge status-used">Used</span>`;
+                timeLeftHtml = 'Used';
             }
 
-            const durationLabel = k.duration === 1 ? '1 Day' : 
-                                 k.duration === 7 ? '1 Week' :
-                                 k.duration === 30 ? '1 Month' :
-                                 k.duration === 365 ? '1 Year' :
-                                 `${k.duration} Days`;
+            const badgeClass = k.durationType === 'minutes' ? 'badge-minutes' : 
+                               k.durationType === 'hours' ? 'badge-minutes' : 'badge-days';
 
             return `
                 <tr>
                     <td>${index + 1}</td>
                     <td><span class="key-value">${k.key}</span></td>
-                    <td><span class="badge-days">${durationLabel}</span></td>
+                    <td><span class="${badgeClass}">${k.durationLabel || getDurationLabel(k.duration, k.durationType || 'days')}</span></td>
                     <td>${statusHtml}</td>
                     <td style="font-size:12px; color:#8e8e9f;">${created}</td>
                     <td style="font-size:12px; color:#8e8e9f;">${expires}</td>
-                    <td style="font-size:12px; color:#8e8e9f;">${k.usedBy || '-'}</td>
+                    <td style="font-size:12px; color:#00ff88;">${timeLeftHtml}</td>
                     <td>
                         <div class="action-btns">
                             <button class="action-btn copy" onclick="copyKey('${k.key}')">📋</button>
@@ -900,8 +1024,8 @@
 
     function updateStats(keys) {
         const total = keys.length;
-        const active = keys.filter(k => k.status === 'active').length;
-        const expired = keys.filter(k => k.status === 'expired').length;
+        const active = keys.filter(k => k.status === 'active' && new Date(k.expires).getTime() > Date.now()).length;
+        const expired = keys.filter(k => k.status === 'expired' || new Date(k.expires).getTime() <= Date.now()).length;
         const used = keys.filter(k => k.status === 'used').length;
 
         document.getElementById('totalKeys').textContent = total;
@@ -946,6 +1070,8 @@
     }
 
     function refreshTable() {
+        // 🔥 Auto-delete check on refresh
+        checkAndDeleteExpiredKeys();
         const keys = loadKeys();
         renderTable(keys);
         updateStats(keys);
@@ -969,7 +1095,7 @@
     }
 
     function exportActiveKeys() {
-        const keys = loadKeys().filter(k => k.status === 'active');
+        const keys = loadKeys().filter(k => k.status === 'active' && new Date(k.expires).getTime() > Date.now());
         if (keys.length === 0) { showToast('❌ No active keys', 'error'); return; }
         downloadJson(keys, 'nexo_keys_active.json');
         showToast(`📥 Exported ${keys.length} active keys`, 'success');
@@ -1004,26 +1130,47 @@
     }
 
     // ============================================================
+    // 🔥 AUTO-DELETE LOOP - Har 30 seconds mein check karega
+    // ============================================================
+
+    function startAutoDelete() {
+        // Check every 30 seconds
+        autoDeleteInterval = setInterval(() => {
+            checkAndDeleteExpiredKeys();
+            // Update table
+            const keys = loadKeys();
+            renderTable(keys);
+            updateStats(keys);
+        }, 30000); // 30 seconds
+        
+        document.getElementById('autoDeleteStatus').textContent = '🟢 Auto-delete active (every 30s)';
+    }
+
+    // ============================================================
     // INIT
     // ============================================================
+
+    // Set default duration type
+    setDurationType('days');
 
     const initialKeys = loadKeys();
     renderTable(initialKeys);
     updateStats(initialKeys);
     updateTokenStatus();
 
+    // 🔥 Start auto-delete
+    startAutoDelete();
+
     window.NexoAPI = {
-        validateKey: validateKey,
         getAllKeys: loadKeys,
         generateKey: generateKey,
         syncToGitHub: syncToGitHub,
         deleteKey: deleteKey
     };
 
-    console.log('🔐 NEXO Admin Panel - Auto-Sync Mode');
+    console.log('🔐 NEXO Admin Panel - Auto-Delete Mode');
     console.log('📊 Total keys:', initialKeys.length);
-    console.log('🔑 Token:', getToken() ? '✅ Set' : '❌ Not set');
-    console.log('💡 Key generate karte hi GitHub pe auto-push ho jayega!');
+    console.log('🔄 Auto-delete checking every 30 seconds');
 </script>
 
 </body>
