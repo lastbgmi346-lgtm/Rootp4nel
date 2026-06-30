@@ -23,31 +23,131 @@
             max-width: 600px;
             white-space: pre-wrap;
             word-wrap: break-word;
+            font-size: 14px;
         }
         .error { color: #ff0044; }
         .success { color: #00ff88; }
+        .loading { color: #ffa500; }
     </style>
 </head>
 <body>
-    <pre id="output">Loading...</pre>
-    <script src="validate.js"></script>
+    <pre id="output" class="loading">⏳ Loading...</pre>
+
     <script>
-        // URL se key read karein
+        // ============================================
+        // COMPLETE VALIDATION CODE
+        // ============================================
+
+        const output = document.getElementById('output');
+
+        // 🔥 Load keys from keys.json
+        async function loadKeys() {
+            try {
+                const response = await fetch('keys.json');
+                if (!response.ok) {
+                    throw new Error('keys.json not found (HTTP ' + response.status + ')');
+                }
+                const data = await response.json();
+                
+                // 🔥 Agar single object hai toh array mein convert karein
+                if (!Array.isArray(data)) {
+                    return [data];
+                }
+                return data;
+            } catch (e) {
+                console.error('Load error:', e);
+                return null;
+            }
+        }
+
+        // 🔥 Main validation function
+        async function validateKey(key) {
+            // Step 1: Load keys
+            const keys = await loadKeys();
+            if (!keys) {
+                return { valid: false, reason: 'Failed to load keys.json' };
+            }
+
+            if (keys.length === 0) {
+                return { valid: false, reason: 'No keys found in database' };
+            }
+
+            // Step 2: Search for key
+            const found = keys.find(k => k.key === key);
+            if (!found) {
+                return { 
+                    valid: false, 
+                    reason: 'Key not found',
+                    available_keys: keys.map(k => k.key) // Debug info
+                };
+            }
+
+            // Step 3: Check status
+            if (found.status === 'used') {
+                return { valid: false, reason: 'Key already used' };
+            }
+
+            // Step 4: Check expiry
+            const now = new Date();
+            const expires = new Date(found.expires);
+            
+            if (now > expires) {
+                // Update status to expired
+                found.status = 'expired';
+                try {
+                    localStorage.setItem('nexo_keys_data', JSON.stringify(keys));
+                } catch (e) {}
+                return { valid: false, reason: 'Key expired' };
+            }
+
+            // ✅ Key is valid!
+            const daysLeft = Math.ceil((expires - now) / (1000 * 60 * 60 * 24));
+            return {
+                valid: true,
+                key: found.key,
+                duration: found.duration,
+                expires: found.expires,
+                days_left: daysLeft,
+                status: found.status
+            };
+        }
+
+        // ============================================
+        // URL SE KEY READ KAREIN
+        // ============================================
+
         const params = new URLSearchParams(window.location.search);
         const key = params.get('key');
-        
-        if (key) {
-            validateKey(key).then(result => {
-                const output = document.getElementById('output');
-                const isValid = result.valid;
-                output.className = isValid ? 'success' : 'error';
+
+        async function main() {
+            if (!key) {
+                output.className = 'error';
+                output.textContent = '❌ No key provided!\n\nUsage: validate.html?key=NEXO-XXXXX';
+                return;
+            }
+
+            output.className = 'loading';
+            output.textContent = '⏳ Validating key: ' + key + '...';
+
+            try {
+                const result = await validateKey(key);
+                
+                if (result.valid) {
+                    output.className = 'success';
+                } else {
+                    output.className = 'error';
+                }
+                
                 output.textContent = JSON.stringify(result, null, 2);
-            }).catch(err => {
-                document.getElementById('output').textContent = 'Error: ' + err.message;
-            });
-        } else {
-            document.getElementById('output').textContent = '❌ No key provided!\nUse: validate.html?key=NEXO-XXXXX';
+                
+            } catch (error) {
+                output.className = 'error';
+                output.textContent = '❌ Error: ' + error.message;
+            }
         }
+
+        // 🔥 Run
+        main();
     </script>
 </body>
 </html>
