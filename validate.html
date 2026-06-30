@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NEXO Validation</title>
+    <style>
+        body {
+            background: #0a0a12;
+            color: #00e5ff;
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        pre {
+            background: #14141e;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,229,255,0.1);
+            max-width: 600px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .error { color: #ff0044; }
+        .success { color: #00ff88; }
+    </style>
+</head>
+<body>
+    <pre id="output">Loading...</pre>
+    <script src="validate.js"></script>
+    <script>
+        // URL se key read karein
+        const params = new URLSearchParams(window.location.search);
+        const key = params.get('key');
+        
+        if (key) {
+            validateKey(key).then(result => {
+                const output = document.getElementById('output');
+                const isValid = result.valid;
+                output.className = isValid ? 'success' : 'error';
+                output.textContent = JSON.stringify(result, null, 2);
+            }).catch(err => {
+                document.getElementById('output').textContent = 'Error: ' + err.message;
+            });
+        } else {
+            document.getElementById('output').textContent = '❌ No key provided!\nUse: validate.html?key=NEXO-XXXXX';
+        }
+    </script>
+</body>
+</html>
