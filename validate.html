@@ -36,10 +36,11 @@
     <script>
         const output = document.getElementById('output');
 
-        // 🔥 Load keys from keys.json
+        // 🔥 CACHE BUSTING - Always fetch fresh
         async function loadKeys() {
             try {
-                const response = await fetch('keys.json?t=' + Date.now());
+                const timestamp = Date.now();
+                const response = await fetch('keys.json?t=' + timestamp);
                 if (!response.ok) {
                     throw new Error('keys.json not found (HTTP ' + response.status + ')');
                 }
@@ -61,7 +62,6 @@
             return keys.find(k => k.key.toUpperCase() === upperKey);
         }
 
-        // 🔥 Main validation function
         async function validateKey(key) {
             const keys = await loadKeys();
             if (!keys) {
@@ -72,7 +72,6 @@
                 return { valid: false, reason: 'No keys in database' };
             }
 
-            // 🔥 Case-insensitive search
             const found = findKey(keys, key);
             if (!found) {
                 return { 
@@ -105,7 +104,6 @@
             };
         }
 
-        // 🔥 URL se key read karein
         const params = new URLSearchParams(window.location.search);
         const key = params.get('key');
 
