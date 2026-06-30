@@ -23,7 +23,6 @@
                 radial-gradient(ellipse at 50% 100%, rgba(112, 0, 255, 0.05) 0%, transparent 50%);
         }
 
-        /* ===== Scrollbar ===== */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #14141e; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { 
@@ -31,13 +30,11 @@
             border-radius: 10px;
         }
 
-        /* ===== Main Container ===== */
         .container {
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* ===== Header ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -111,7 +108,6 @@
             letter-spacing: 1px;
         }
 
-        /* ===== Key Generation Panel ===== */
         .gen-panel {
             background: rgba(20, 20, 30, 0.8);
             border-radius: 16px;
@@ -202,10 +198,6 @@
             box-shadow: 0 6px 30px rgba(112, 0, 255, 0.4);
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
         .btn-danger {
             background: linear-gradient(135deg, #ff0044, #ff0066);
             color: #fff;
@@ -237,7 +229,17 @@
             color: #fff;
         }
 
-        /* ===== Key Type Quick Buttons ===== */
+        .btn-sync {
+            background: linear-gradient(135deg, #ff6b00, #ff9500);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
+        }
+
+        .btn-sync:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(255, 107, 0, 0.4);
+        }
+
         .quick-types {
             display: flex;
             gap: 8px;
@@ -269,7 +271,45 @@
             background: rgba(0, 229, 255, 0.08);
         }
 
-        /* ===== Table ===== */
+        .bulk-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .bulk-options input {
+            width: 80px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: #0a0a12;
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .bulk-options input:focus {
+            border-color: #7000ff;
+            outline: none;
+        }
+
+        .export-section {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .export-section .btn {
+            font-size: 12px;
+            padding: 8px 20px;
+        }
+
         .table-container {
             background: rgba(20, 20, 30, 0.8);
             border-radius: 16px;
@@ -432,7 +472,22 @@
             background: rgba(0, 229, 255, 0.2);
         }
 
-        /* ===== Toast ===== */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #505066;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            color: #8e8e9f;
+            margin-bottom: 8px;
+        }
+
         .toast {
             position: fixed;
             bottom: 30px;
@@ -476,11 +531,10 @@
         }
 
         @keyframes slideOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(30px); }
+            from { opacity: 1; transform: translateY(30px); }
+            to { opacity: 0; transform: translateY(0); }
         }
 
-        /* ===== Responsive ===== */
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -508,89 +562,11 @@
             .search-box {
                 width: 100%;
             }
-            th, td {
-                padding: 10px 12px;
-                font-size: 12px;
-            }
             .toast {
                 left: 20px;
                 right: 20px;
                 bottom: 20px;
             }
-        }
-
-        /* ===== Empty State ===== */
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #505066;
-        }
-
-        .empty-state .icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .empty-state h3 {
-            color: #8e8e9f;
-            margin-bottom: 8px;
-        }
-
-        /* ===== Bulk Generate ===== */
-        .bulk-options {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .bulk-options input {
-            width: 80px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.06);
-            background: #0a0a12;
-            color: #fff;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .bulk-options input:focus {
-            border-color: #7000ff;
-            outline: none;
-        }
-
-        /* ===== Export Section ===== */
-        .export-section {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .export-section .btn {
-            font-size: 12px;
-            padding: 8px 20px;
-        }
-
-        /* ===== Loading Spinner ===== */
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-top: 2px solid #00e5ff;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -656,7 +632,6 @@
             </button>
         </div>
 
-        <!-- Quick Type Buttons -->
         <div class="quick-types">
             <span style="color:#505066; font-size:11px; margin-right:8px;">Quick:</span>
             <span class="quick-type" onclick="quickGenerate(1)">1 Day</span>
@@ -667,7 +642,6 @@
             <span class="quick-type" onclick="quickGenerate(365)">1 Year</span>
         </div>
 
-        <!-- Bulk Generate -->
         <div class="bulk-options">
             <span style="color:#505066; font-size:12px;">Bulk Generate:</span>
             <input type="number" id="bulkCount" value="5" min="1" max="50" />
@@ -681,10 +655,13 @@
             <button class="btn btn-success" onclick="bulkGenerate()" style="padding:8px 20px; font-size:12px;">Generate Bulk</button>
         </div>
 
-        <!-- Export Section -->
+        <!-- ===== EXPORT + SYNC SECTION ===== -->
         <div class="export-section">
             <button class="btn btn-outline" onclick="exportKeys()" style="font-size:12px; padding:8px 20px;">📥 Export All Keys</button>
             <button class="btn btn-outline" onclick="exportActiveKeys()" style="font-size:12px; padding:8px 20px;">📥 Export Active</button>
+            <button class="btn btn-sync" onclick="syncKeysToJSON()" style="font-size:12px; padding:8px 20px;">
+                📤 Sync to JSON
+            </button>
             <button class="btn btn-danger" onclick="clearAllKeys()" style="font-size:12px; padding:8px 20px;">🗑️ Clear All</button>
         </div>
     </div>
@@ -720,7 +697,6 @@
                     </tr>
                 </thead>
                 <tbody id="keyTableBody">
-                    <!-- Rows inserted by JS -->
                 </tbody>
             </table>
         </div>
@@ -782,7 +758,6 @@
 
         const keys = loadKeys();
 
-        // Check duplicate
         if (keys.some(k => k.key === key)) {
             showToast('❌ Key already exists!', 'error');
             return;
@@ -808,7 +783,6 @@
         document.getElementById('customKeyInput').value = '';
         showToast(`✅ Key generated: ${key} (${duration} days)`, 'success');
         
-        // Animate button
         const btn = document.getElementById('genBtnText');
         btn.innerHTML = '✅ Generated!';
         setTimeout(() => { btn.innerHTML = '⚡ Generate Key'; }, 1500);
@@ -854,7 +828,35 @@
     }
 
     // ============================================================
-    // VALIDATION API (for app to check keys)
+    // 🔥 SYNC TO JSON - Download keys.json for GitHub upload
+    // ============================================================
+
+    function syncKeysToJSON() {
+        const keys = loadKeys();
+        if (keys.length === 0) {
+            showToast('❌ No keys to sync! Generate at least one key.', 'error');
+            return;
+        }
+
+        // 🔥 Format with proper indentation
+        const jsonStr = JSON.stringify(keys, null, 2);
+        
+        // 🔥 Download as keys.json
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'keys.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showToast(`✅ keys.json downloaded! Contains ${keys.length} keys. Upload to GitHub repo.`, 'success');
+    }
+
+    // ============================================================
+    // VALIDATION API
     // ============================================================
 
     function validateKey(key) {
@@ -1002,33 +1004,9 @@
     // ACTIONS
     // ============================================================
 
-    // 🔥 ADMIN PANEL MEIN ADD KAREIN - JSON file download/sync
-function syncKeysToJSON() {
-    const keys = loadKeys();
-    if (keys.length === 0) {
-        showToast('❌ No keys to sync', 'error');
-        return;
-    }
-    
-    // Download as JSON file
-    const blob = new Blob([JSON.stringify(keys, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'keys.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    showToast(`✅ keys.json downloaded! Upload to GitHub repo.`, 'success');
-}
-
-// 🔥 Export button mein yeh add karein
-// <button class="btn btn-primary" onclick="syncKeysToJSON()">📤 Sync to JSON</button>
-
+    // 🔥 DELETE KEY - Full working
     function deleteKey(key) {
-        if (!confirm(`Delete key: ${key}?`)) return;
+        if (!confirm(`🗑️ Delete key: ${key}?`)) return;
         let keys = loadKeys();
         keys = keys.filter(k => k.key !== key);
         saveKeys(keys);
@@ -1039,7 +1017,6 @@ function syncKeysToJSON() {
         navigator.clipboard.writeText(key).then(() => {
             showToast(`📋 Copied: ${key}`, 'success');
         }).catch(() => {
-            // Fallback
             const textarea = document.createElement('textarea');
             textarea.value = key;
             document.body.appendChild(textarea);
@@ -1106,7 +1083,7 @@ function syncKeysToJSON() {
     }
 
     // ============================================================
-    // TOAST NOTIFICATIONS
+    // TOAST
     // ============================================================
 
     function showToast(message, type = 'info') {
@@ -1126,25 +1103,18 @@ function syncKeysToJSON() {
     // INIT
     // ============================================================
 
-    // Load initial data
     const initialKeys = loadKeys();
     renderTable(initialKeys);
     updateStats(initialKeys);
 
-    // ============================================================
-    // WEBHOOK / APP CONNECTION (for your app to validate)
-    // ============================================================
-
-    // You can expose this function globally for your app to call
     window.NexoAPI = {
         validateKey: validateKey,
         markKeyUsed: markKeyUsed,
         getAllKeys: loadKeys,
-        generateKey: generateKey
+        generateKey: generateKey,
+        syncKeysToJSON: syncKeysToJSON,
+        deleteKey: deleteKey
     };
-
-    // If you're using a web server, you can handle POST requests
-    // For GitHub Pages, this will work client-side with localStorage
 
     console.log('🔐 NEXO Admin Panel loaded successfully!');
     console.log('📊 Total keys:', initialKeys.length);
