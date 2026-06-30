@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXO Admin Panel - Key Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a12;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: 
+                radial-gradient(ellipse at 50% 0%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(112, 0, 255, 0.05) 0%, transparent 50%);
+        }
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #14141e; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, #00e5ff, #7000ff);
+            border-radius: 10px;
+        }
+
+        /* ===== Main Container ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ===== Header ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: rgba(20, 20, 30, 0.8);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 229, 255, 0.15);
+            backdrop-filter: blur(12px);
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+            background: linear-gradient(135deg, #00e5ff, #7000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00e5ff, #7000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .logo-sub {
+            font-size: 12px;
+            color: #8e8e9f;
+            font-weight: 300;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 8px 18px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-number {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00e5ff, #7000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #8e8e9f;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== Key Generation Panel ===== */
+        .gen-panel {
+            background: rgba(20, 20, 30, 0.8);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(12px);
+        }
+
+        .gen-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #00e5ff;
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .gen-title span {
+            color: #8e8e9f;
+            font-weight: 300;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gen-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .gen-row select,
+        .gen-row input {
+            padding: 12px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: #14141e;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gen-row select:focus,
+        .gen-row input:focus {
+            border-color: #7000ff;
+            box-shadow: 0 0 20px rgba(112, 0, 255, 0.15);
+        }
+
+        .gen-row select {
+            min-width: 180px;
+            cursor: pointer;
+        }
+
+        .gen-row input {
+            min-width: 250px;
+            flex: 1;
+        }
+
+        .gen-row input::placeholder {
+            color: #505066;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00e5ff, #7000ff);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(112, 0, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(112, 0, 255, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff0044, #ff0066);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(255, 0, 68, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            color: #0a0a12;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #8e8e9f;
+        }
+
+        .btn-outline:hover {
+            border-color: #00e5ff;
+            color: #fff;
+        }
+
+        /* ===== Key Type Quick Buttons ===== */
+        .quick-types {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 15px 0 5px 0;
+        }
+
+        .quick-type {
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.02);
+            color: #8e8e9f;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .quick-type:hover {
+            border-color: #7000ff;
+            color: #fff;
+            background: rgba(112, 0, 255, 0.1);
+        }
+
+        .quick-type.active {
+            border-color: #00e5ff;
+            color: #00e5ff;
+            background: rgba(0, 229, 255, 0.08);
+        }
+
+        /* ===== Table ===== */
+        .table-container {
+            background: rgba(20, 20, 30, 0.8);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .table-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #00e5ff;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: #0a0a12;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: #7000ff;
+        }
+
+        .search-box::placeholder {
+            color: #505066;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            padding: 0 5px 5px 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead {
+            background: rgba(0, 229, 255, 0.03);
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            color: #8e8e9f;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            color: #e0e0e0;
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .key-value {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 12px;
+            color: #00e5ff;
+            background: rgba(0, 229, 255, 0.06);
+            padding: 2px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 136, 0.15);
+            color: #00ff88;
+        }
+
+        .status-expired {
+            background: rgba(255, 0, 68, 0.15);
+            color: #ff0044;
+        }
+
+        .status-used {
+            background: rgba(255, 165, 0, 0.15);
+            color: #ffa500;
+        }
+
+        .badge-days {
+            font-size: 11px;
+            background: rgba(112, 0, 255, 0.15);
+            color: #a070ff;
+            padding: 2px 10px;
+            border-radius: 4px;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .action-btn.delete {
+            background: rgba(255, 0, 68, 0.15);
+            color: #ff0044;
+        }
+
+        .action-btn.delete:hover {
+            background: rgba(255, 0, 68, 0.3);
+        }
+
+        .action-btn.copy {
+            background: rgba(0, 229, 255, 0.1);
+            color: #00e5ff;
+        }
+
+        .action-btn.copy:hover {
+            background: rgba(0, 229, 255, 0.2);
+        }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 28px;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 14px;
+            z-index: 9999;
+            animation: slideIn 0.4s ease;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.05);
+            max-width: 400px;
+        }
+
+        .toast-success {
+            background: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            border-color: rgba(0, 255, 136, 0.2);
+        }
+
+        .toast-error {
+            background: rgba(255, 0, 68, 0.1);
+            color: #ff0044;
+            border-color: rgba(255, 0, 68, 0.2);
+        }
+
+        .toast-info {
+            background: rgba(0, 229, 255, 0.1);
+            color: #00e5ff;
+            border-color: rgba(0, 229, 255, 0.2);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .toast.hide {
+            animation: slideOut 0.3s ease forwards;
+        }
+
+        @keyframes slideOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(30px); }
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .header-stats {
+                justify-content: center;
+            }
+            .gen-row {
+                flex-direction: column;
+            }
+            .gen-row select,
+            .gen-row input {
+                width: 100%;
+                min-width: unset;
+            }
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .table-actions {
+                flex-direction: column;
+            }
+            .search-box {
+                width: 100%;
+            }
+            th, td {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+            .toast {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+            }
+        }
+
+        /* ===== Empty State ===== */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #505066;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            color: #8e8e9f;
+            margin-bottom: 8px;
+        }
+
+        /* ===== Bulk Generate ===== */
+        .bulk-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .bulk-options input {
+            width: 80px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: #0a0a12;
+            color: #fff;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .bulk-options input:focus {
+            border-color: #7000ff;
+            outline: none;
+        }
+
+        /* ===== Export Section ===== */
+        .export-section {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .export-section .btn {
+            font-size: 12px;
+            padding: 8px 20px;
+        }
+
+        /* ===== Loading Spinner ===== */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-top: 2px solid #00e5ff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">◆</span>
+            <div>
+                <div class="logo-text">NEXO ADMIN</div>
+                <div class="logo-sub">Key Management System v2.0</div>
+            </div>
+        </div>
+        <div class="header-stats" id="headerStats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalKeys">0</div>
+                <div class="stat-label">Total Keys</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="activeKeys">0</div>
+                <div class="stat-label">Active</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="expiredKeys">0</div>
+                <div class="stat-label">Expired</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="usedKeys">0</div>
+                <div class="stat-label">Used</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== KEY GENERATION PANEL ===== -->
+    <div class="gen-panel">
+        <div class="gen-title">
+            🔑 Generate New Key
+            <span>— Create premium access keys for users</span>
+        </div>
+
+        <div class="gen-row">
+            <select id="durationSelect">
+                <option value="1">1 Day</option>
+                <option value="2">2 Days</option>
+                <option value="3">3 Days</option>
+                <option value="5">5 Days</option>
+                <option value="7">7 Days (1 Week)</option>
+                <option value="14">14 Days (2 Weeks)</option>
+                <option value="30" selected>30 Days (1 Month)</option>
+                <option value="60">60 Days (2 Months)</option>
+                <option value="90">90 Days (3 Months)</option>
+                <option value="180">180 Days (6 Months)</option>
+                <option value="365">365 Days (1 Year)</option>
+            </select>
+
+            <input type="text" id="customKeyInput" placeholder="Custom key (optional, leave empty for auto-generate)" />
+
+            <button class="btn btn-primary" onclick="generateKey()">
+                <span id="genBtnText">⚡ Generate Key</span>
+            </button>
+        </div>
+
+        <!-- Quick Type Buttons -->
+        <div class="quick-types">
+            <span style="color:#505066; font-size:11px; margin-right:8px;">Quick:</span>
+            <span class="quick-type" onclick="quickGenerate(1)">1 Day</span>
+            <span class="quick-type" onclick="quickGenerate(3)">3 Days</span>
+            <span class="quick-type" onclick="quickGenerate(7)">1 Week</span>
+            <span class="quick-type active" onclick="quickGenerate(30)">1 Month</span>
+            <span class="quick-type" onclick="quickGenerate(90)">3 Months</span>
+            <span class="quick-type" onclick="quickGenerate(365)">1 Year</span>
+        </div>
+
+        <!-- Bulk Generate -->
+        <div class="bulk-options">
+            <span style="color:#505066; font-size:12px;">Bulk Generate:</span>
+            <input type="number" id="bulkCount" value="5" min="1" max="50" />
+            <span style="color:#505066; font-size:12px;">keys of</span>
+            <select id="bulkDuration" style="padding:6px 12px; border-radius:6px; background:#0a0a12; color:#fff; border:1px solid rgba(255,255,255,0.06);">
+                <option value="1">1 Day</option>
+                <option value="7">7 Days</option>
+                <option value="30" selected>30 Days</option>
+                <option value="90">90 Days</option>
+            </select>
+            <button class="btn btn-success" onclick="bulkGenerate()" style="padding:8px 20px; font-size:12px;">Generate Bulk</button>
+        </div>
+
+        <!-- Export Section -->
+        <div class="export-section">
+            <button class="btn btn-outline" onclick="exportKeys()" style="font-size:12px; padding:8px 20px;">📥 Export All Keys</button>
+            <button class="btn btn-outline" onclick="exportActiveKeys()" style="font-size:12px; padding:8px 20px;">📥 Export Active</button>
+            <button class="btn btn-danger" onclick="clearAllKeys()" style="font-size:12px; padding:8px 20px;">🗑️ Clear All</button>
+        </div>
+    </div>
+
+    <!-- ===== TABLE ===== -->
+    <div class="table-container">
+        <div class="table-header">
+            <h2>📋 Key Database</h2>
+            <div class="table-actions">
+                <input type="text" class="search-box" id="searchInput" placeholder="🔍 Search keys..." oninput="filterTable()" />
+                <select id="statusFilter" onchange="filterTable()" style="padding:8px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:#0a0a12; color:#fff; font-size:13px; outline:none;">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="expired">Expired</option>
+                    <option value="used">Used</option>
+                </select>
+                <button class="btn btn-outline" onclick="refreshTable()" style="padding:8px 16px; font-size:12px;">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Key</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Expires</th>
+                        <th>Used By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="keyTableBody">
+                    <!-- Rows inserted by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== TOAST ===== -->
+<div id="toastContainer"></div>
+
+<script>
+    // ============================================================
+    // DATA LAYER - All keys stored in localStorage
+    // ============================================================
+
+    const STORAGE_KEY = 'nexo_keys_data';
+
+    function loadKeys() {
+        try {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                return JSON.parse(data);
+            }
+        } catch (e) {
+            console.error('Failed to load keys:', e);
+        }
+        return [];
+    }
+
+    function saveKeys(keys) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(keys));
+        updateStats(keys);
+        renderTable(keys);
+    }
+
+    // ============================================================
+    // KEY GENERATION
+    // ============================================================
+
+    function generateNexoKey() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = 'NEXO-';
+        for (let i = 0; i < 8; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
+    function generateKey() {
+        const duration = parseInt(document.getElementById('durationSelect').value);
+        const customKey = document.getElementById('customKeyInput').value.trim().toUpperCase();
+
+        let key = customKey;
+        if (!key) {
+            key = generateNexoKey();
+        } else if (!key.startsWith('NEXO-')) {
+            key = 'NEXO-' + key;
+        }
+
+        const keys = loadKeys();
+
+        // Check duplicate
+        if (keys.some(k => k.key === key)) {
+            showToast('❌ Key already exists!', 'error');
+            return;
+        }
+
+        const now = new Date();
+        const expires = new Date(now);
+        expires.setDate(expires.getDate() + duration);
+
+        const newKey = {
+            key: key,
+            duration: duration,
+            status: 'active',
+            created: now.toISOString(),
+            expires: expires.toISOString(),
+            usedBy: null,
+            usedAt: null
+        };
+
+        keys.unshift(newKey);
+        saveKeys(keys);
+
+        document.getElementById('customKeyInput').value = '';
+        showToast(`✅ Key generated: ${key} (${duration} days)`, 'success');
+        
+        // Animate button
+        const btn = document.getElementById('genBtnText');
+        btn.innerHTML = '✅ Generated!';
+        setTimeout(() => { btn.innerHTML = '⚡ Generate Key'; }, 1500);
+    }
+
+    function quickGenerate(days) {
+        document.getElementById('durationSelect').value = days;
+        generateKey();
+    }
+
+    function bulkGenerate() {
+        const count = parseInt(document.getElementById('bulkCount').value) || 5;
+        const duration = parseInt(document.getElementById('bulkDuration').value);
+        const keys = loadKeys();
+        const generated = [];
+
+        for (let i = 0; i < count; i++) {
+            let key;
+            let attempts = 0;
+            do {
+                key = generateNexoKey();
+                attempts++;
+            } while (keys.some(k => k.key === key) && attempts < 100);
+
+            const now = new Date();
+            const expires = new Date(now);
+            expires.setDate(expires.getDate() + duration);
+
+            keys.unshift({
+                key: key,
+                duration: duration,
+                status: 'active',
+                created: now.toISOString(),
+                expires: expires.toISOString(),
+                usedBy: null,
+                usedAt: null
+            });
+            generated.push(key);
+        }
+
+        saveKeys(keys);
+        showToast(`✅ Generated ${generated.length} keys (${duration} days each)`, 'success');
+    }
+
+    // ============================================================
+    // VALIDATION API (for app to check keys)
+    // ============================================================
+
+    function validateKey(key) {
+        const keys = loadKeys();
+        const found = keys.find(k => k.key === key);
+
+        if (!found) {
+            return { valid: false, reason: 'Key not found' };
+        }
+
+        if (found.status === 'used') {
+            return { valid: false, reason: 'Key already used' };
+        }
+
+        const now = new Date();
+        const expires = new Date(found.expires);
+
+        if (now > expires) {
+            found.status = 'expired';
+            saveKeys(keys);
+            return { valid: false, reason: 'Key expired' };
+        }
+
+        return { 
+            valid: true, 
+            key: found,
+            expiresIn: Math.ceil((expires - now) / (1000 * 60 * 60 * 24))
+        };
+    }
+
+    function markKeyUsed(key, userIdentifier) {
+        const keys = loadKeys();
+        const found = keys.find(k => k.key === key);
+
+        if (!found) return false;
+        if (found.status !== 'active') return false;
+
+        const now = new Date();
+        if (new Date(found.expires) < now) {
+            found.status = 'expired';
+            saveKeys(keys);
+            return false;
+        }
+
+        found.status = 'used';
+        found.usedBy = userIdentifier || 'Unknown';
+        found.usedAt = now.toISOString();
+        saveKeys(keys);
+        return true;
+    }
+
+    // ============================================================
+    // RENDER TABLE
+    // ============================================================
+
+    function renderTable(keys) {
+        const tbody = document.getElementById('keyTableBody');
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const statusFilter = document.getElementById('statusFilter').value;
+
+        let filtered = keys;
+
+        if (search) {
+            filtered = filtered.filter(k => k.key.toLowerCase().includes(search));
+        }
+
+        if (statusFilter !== 'all') {
+            filtered = filtered.filter(k => k.status === statusFilter);
+        }
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8">
+                        <div class="empty-state">
+                            <div class="icon">🔑</div>
+                            <h3>No keys found</h3>
+                            <p style="color:#505066; font-size:13px;">Generate your first key using the panel above.</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map((k, index) => {
+            const created = new Date(k.created).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+            const expires = new Date(k.expires).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+            
+            let statusHtml = '';
+            if (k.status === 'active') {
+                const now = new Date();
+                const exp = new Date(k.expires);
+                const daysLeft = Math.ceil((exp - now) / (1000 * 60 * 60 * 24));
+                statusHtml = `<span class="status-badge status-active">Active (${daysLeft}d)</span>`;
+            } else if (k.status === 'expired') {
+                statusHtml = `<span class="status-badge status-expired">Expired</span>`;
+            } else {
+                statusHtml = `<span class="status-badge status-used">Used</span>`;
+            }
+
+            const durationLabel = k.duration === 1 ? '1 Day' : 
+                                 k.duration === 7 ? '1 Week' :
+                                 k.duration === 30 ? '1 Month' :
+                                 k.duration === 365 ? '1 Year' :
+                                 `${k.duration} Days`;
+
+            return `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><span class="key-value">${k.key}</span></td>
+                    <td><span class="badge-days">${durationLabel}</span></td>
+                    <td>${statusHtml}</td>
+                    <td style="font-size:12px; color:#8e8e9f;">${created}</td>
+                    <td style="font-size:12px; color:#8e8e9f;">${expires}</td>
+                    <td style="font-size:12px; color:#8e8e9f;">${k.usedBy || '-'}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn copy" onclick="copyKey('${k.key}')">📋</button>
+                            <button class="action-btn delete" onclick="deleteKey('${k.key}')">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // ============================================================
+    // STATS
+    // ============================================================
+
+    function updateStats(keys) {
+        const total = keys.length;
+        const active = keys.filter(k => k.status === 'active').length;
+        const expired = keys.filter(k => k.status === 'expired').length;
+        const used = keys.filter(k => k.status === 'used').length;
+
+        document.getElementById('totalKeys').textContent = total;
+        document.getElementById('activeKeys').textContent = active;
+        document.getElementById('expiredKeys').textContent = expired;
+        document.getElementById('usedKeys').textContent = used;
+    }
+
+    // ============================================================
+    // ACTIONS
+    // ============================================================
+
+    function deleteKey(key) {
+        if (!confirm(`Delete key: ${key}?`)) return;
+        let keys = loadKeys();
+        keys = keys.filter(k => k.key !== key);
+        saveKeys(keys);
+        showToast(`🗑️ Deleted: ${key}`, 'info');
+    }
+
+    function copyKey(key) {
+        navigator.clipboard.writeText(key).then(() => {
+            showToast(`📋 Copied: ${key}`, 'success');
+        }).catch(() => {
+            // Fallback
+            const textarea = document.createElement('textarea');
+            textarea.value = key;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast(`📋 Copied: ${key}`, 'success');
+        });
+    }
+
+    function clearAllKeys() {
+        if (!confirm('⚠️ Delete ALL keys? This cannot be undone!')) return;
+        if (!confirm('Are you absolutely sure?')) return;
+        saveKeys([]);
+        showToast('🗑️ All keys deleted', 'info');
+    }
+
+    function refreshTable() {
+        const keys = loadKeys();
+        renderTable(keys);
+        updateStats(keys);
+        showToast('🔄 Refreshed', 'info');
+    }
+
+    function filterTable() {
+        const keys = loadKeys();
+        renderTable(keys);
+    }
+
+    // ============================================================
+    // EXPORT
+    // ============================================================
+
+    function exportKeys() {
+        const keys = loadKeys();
+        if (keys.length === 0) {
+            showToast('❌ No keys to export', 'error');
+            return;
+        }
+        downloadJson(keys, 'nexo_keys_all.json');
+        showToast(`📥 Exported ${keys.length} keys`, 'success');
+    }
+
+    function exportActiveKeys() {
+        const keys = loadKeys().filter(k => k.status === 'active');
+        if (keys.length === 0) {
+            showToast('❌ No active keys to export', 'error');
+            return;
+        }
+        downloadJson(keys, 'nexo_keys_active.json');
+        showToast(`📥 Exported ${keys.length} active keys`, 'success');
+    }
+
+    function downloadJson(data, filename) {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    // ============================================================
+    // TOAST NOTIFICATIONS
+    // ============================================================
+
+    function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('hide');
+            setTimeout(() => toast.remove(), 400);
+        }, 3500);
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+
+    // Load initial data
+    const initialKeys = loadKeys();
+    renderTable(initialKeys);
+    updateStats(initialKeys);
+
+    // ============================================================
+    // WEBHOOK / APP CONNECTION (for your app to validate)
+    // ============================================================
+
+    // You can expose this function globally for your app to call
+    window.NexoAPI = {
+        validateKey: validateKey,
+        markKeyUsed: markKeyUsed,
+        getAllKeys: loadKeys,
+        generateKey: generateKey
+    };
+
+    // If you're using a web server, you can handle POST requests
+    // For GitHub Pages, this will work client-side with localStorage
+
+    console.log('🔐 NEXO Admin Panel loaded successfully!');
+    console.log('📊 Total keys:', initialKeys.length);
+    console.log('💡 API available: window.NexoAPI');
+</script>
+
+</body>
+</html>
