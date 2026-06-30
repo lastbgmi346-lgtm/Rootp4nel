@@ -31,35 +31,23 @@
     </style>
 </head>
 <body>
-    <pre id="output" class="loading">⏳ Validating...</pre>
+    <pre id="output" class="loading">⏳ Loading...</pre>
 
     <script>
         const output = document.getElementById('output');
 
-        // 🔥 CACHE BUSTING - Always fetch fresh
         async function loadKeys() {
             try {
-                const timestamp = Date.now();
-                const response = await fetch('keys.json?t=' + timestamp);
+                const response = await fetch('keys.json?t=' + Date.now());
                 if (!response.ok) {
-                    throw new Error('keys.json not found (HTTP ' + response.status + ')');
+                    throw new Error('keys.json not found');
                 }
                 const data = await response.json();
-                
-                if (!Array.isArray(data)) {
-                    return [data];
-                }
+                if (!Array.isArray(data)) return [data];
                 return data;
             } catch (e) {
-                console.error('Load error:', e);
                 return null;
             }
-        }
-
-        // 🔥 Case-insensitive key search
-        function findKey(keys, key) {
-            const upperKey = key.toUpperCase();
-            return keys.find(k => k.key.toUpperCase() === upperKey);
         }
 
         async function validateKey(key) {
@@ -69,16 +57,12 @@
             }
 
             if (keys.length === 0) {
-                return { valid: false, reason: 'No keys in database' };
+                return { valid: false, reason: 'No keys found' };
             }
 
-            const found = findKey(keys, key);
+            const found = keys.find(k => k.key.toUpperCase() === key.toUpperCase());
             if (!found) {
-                return { 
-                    valid: false, 
-                    reason: 'Key not found',
-                    available_keys: keys.map(k => k.key)
-                };
+                return { valid: false, reason: 'Key not found' };
             }
 
             if (found.status === 'used') {
@@ -89,7 +73,6 @@
             const expires = new Date(found.expires);
             
             if (now > expires) {
-                found.status = 'expired';
                 return { valid: false, reason: 'Key expired' };
             }
 
@@ -110,17 +93,17 @@
         async function main() {
             if (!key) {
                 output.className = 'error';
-                output.textContent = '❌ No key provided!\n\nUsage: validate.html?key=NEXO-XXXXX';
+                output.textContent = JSON.stringify({ valid: false, reason: 'No key provided' });
                 return;
             }
 
             try {
                 const result = await validateKey(key);
                 output.className = result.valid ? 'success' : 'error';
-                output.textContent = JSON.stringify(result, null, 2);
+                output.textContent = JSON.stringify(result);
             } catch (error) {
                 output.className = 'error';
-                output.textContent = '❌ Error: ' + error.message;
+                output.textContent = JSON.stringify({ valid: false, reason: error.message });
             }
         }
 
