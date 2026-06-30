@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXO Key System</title>
+    <meta http-equiv="refresh" content="0; url=admin.html">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a12;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            flex-direction: column;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 229, 255, 0.1);
+            border-top: 3px solid #00e5ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .title {
+            font-size: 24px;
+            background: linear-gradient(135deg, #00e5ff, #7000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+        .sub {
+            color: #8e8e9f;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        a {
+            color: #00e5ff;
+            text-decoration: none;
+            margin-top: 20px;
+            padding: 12px 30px;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        a:hover {
+            background: rgba(0, 229, 255, 0.1);
+            border-color: #00e5ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <div class="title">NEXO Admin Panel</div>
+    <div class="sub">Redirecting to admin panel...</div>
+    <a href="admin.html">Click here if not redirected</a>
+
+    <script>
+        // Auto-redirect to admin.html
+        window.location.href = "admin.html";
+    </script>
+</body>
+</html>
