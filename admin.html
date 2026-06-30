@@ -156,13 +156,11 @@
             display: block;
         }
 
-        /* ===== CONTAINER ===== */
         .container {
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* ===== HEADER ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -257,7 +255,6 @@
             letter-spacing: 1px;
         }
 
-        /* ===== GEN PANEL ===== */
         .gen-panel {
             background: rgba(20, 20, 30, 0.8);
             border-radius: 16px;
@@ -309,7 +306,6 @@
         .gen-row input { min-width: 250px; flex: 1; }
         .gen-row input::placeholder { color: #505066; }
 
-        /* ===== BUTTONS ===== */
         .btn {
             padding: 12px 30px;
             border: none;
@@ -357,7 +353,6 @@
         }
         .btn-github:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(110, 84, 148, 0.4); }
 
-        /* ===== QUICK TYPES ===== */
         .quick-types {
             display: flex;
             gap: 8px;
@@ -378,7 +373,6 @@
         .quick-type:hover { border-color: #7000ff; color: #fff; background: rgba(112, 0, 255, 0.1); }
         .quick-type.active { border-color: #00e5ff; color: #00e5ff; background: rgba(0, 229, 255, 0.08); }
 
-        /* ===== BULK OPTIONS ===== */
         .bulk-options {
             display: flex;
             gap: 10px;
@@ -399,7 +393,6 @@
         }
         .bulk-options input:focus { border-color: #7000ff; outline: none; }
 
-        /* ===== EXPORT SECTION ===== */
         .export-section {
             display: flex;
             gap: 10px;
@@ -410,7 +403,6 @@
         }
         .export-section .btn { font-size: 12px; padding: 8px 20px; }
 
-        /* ===== TABLE ===== */
         .table-container {
             background: rgba(20, 20, 30, 0.8);
             border-radius: 16px;
@@ -526,7 +518,6 @@
         .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
         .empty-state h3 { color: #8e8e9f; margin-bottom: 8px; }
 
-        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -548,7 +539,6 @@
         .toast.hide { animation: slideOut 0.3s ease forwards; }
         @keyframes slideOut { from { opacity: 1; transform: translateY(30px); } to { opacity: 0; transform: translateY(30px); } }
 
-        /* ===== TOKEN SECTION ===== */
         .token-section {
             display: flex;
             gap: 10px;
@@ -581,7 +571,6 @@
         .token-status.active { color: #00ff88; }
         .token-status.inactive { color: #ff0044; }
 
-        /* ===== DURATION TYPE ===== */
         .duration-type {
             display: flex;
             gap: 8px;
@@ -597,7 +586,6 @@
             color: #fff;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -989,7 +977,25 @@
     }
 
     // ============================================================
-    // 🔥 SYNC TO GITHUB
+    // 🔥 FETCH EXISTING KEYS FROM GITHUB
+    // ============================================================
+
+    async function fetchKeysFromGitHub() {
+        try {
+            const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/refs/heads/${GITHUB_BRANCH}/${GITHUB_PATH}?t=${Date.now()}`);
+            if (!response.ok) {
+                return null;
+            }
+            const data = await response.json();
+            return Array.isArray(data) ? data : null;
+        } catch (e) {
+            console.error('Failed to fetch keys:', e);
+            return null;
+        }
+    }
+
+    // ============================================================
+    // 🔥 SYNC TO GITHUB - MERGE EXISTING KEYS
     // ============================================================
 
     async function syncToGitHub(keys) {
@@ -1000,7 +1006,29 @@
         }
 
         try {
-            const jsonContent = JSON.stringify(keys, null, 2);
+            // 🔥 First, fetch existing keys from GitHub
+            const existingKeys = await fetchKeysFromGitHub();
+            let mergedKeys = keys;
+            
+            if (existingKeys && existingKeys.length > 0) {
+                // 🔥 MERGE: Combine existing keys with new keys (avoid duplicates)
+                const keyMap = new Map();
+                
+                // Add all existing keys
+                for (let k of existingKeys) {
+                    keyMap.set(k.key, k);
+                }
+                
+                // Add/update new keys
+                for (let k of keys) {
+                    keyMap.set(k.key, k);
+                }
+                
+                mergedKeys = Array.from(keyMap.values());
+                console.log('✅ Merged keys:', mergedKeys.length);
+            }
+
+            const jsonContent = JSON.stringify(mergedKeys, null, 2);
             const encodedContent = btoa(unescape(encodeURIComponent(jsonContent)));
 
             const getUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
@@ -1036,7 +1064,9 @@
             });
 
             if (pushResponse.ok) {
-                showToast(`✅ Synced ${keys.length} keys to GitHub!`, 'success');
+                // 🔥 Update local storage with merged keys
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(mergedKeys));
+                showToast(`✅ Synced ${mergedKeys.length} keys to GitHub!`, 'success');
                 return true;
             } else {
                 const error = await pushResponse.json();
@@ -1051,7 +1081,7 @@
     }
 
     // ============================================================
-    // 🔥 AUTO-DELETE
+    // 🔥 AUTO-DELETE - Only when key expires
     // ============================================================
 
     function checkAndDeleteExpiredKeys() {
@@ -1147,8 +1177,10 @@
             key = 'NEXO-' + key;
         }
 
-        const keys = loadKeys();
+        // 🔥 Load current keys (local)
+        let keys = loadKeys();
 
+        // 🔥 Check duplicate in local
         if (keys.some(k => k.key === key)) {
             showToast('❌ Key already exists!', 'error');
             return;
@@ -1179,6 +1211,7 @@
         btn.innerHTML = '⏳ Syncing...';
         btn.disabled = true;
 
+        // 🔥 SYNC: Merge with GitHub keys
         const synced = await syncToGitHub(keys);
 
         btn.innerHTML = synced ? '✅ Synced!' : '⚠️ Sync failed';
@@ -1204,7 +1237,7 @@
         const select = document.getElementById('bulkDuration');
         const value = parseInt(select.value);
         const type = select.options[select.selectedIndex].dataset.type;
-        const keys = loadKeys();
+        let keys = loadKeys();
         const generated = [];
 
         for (let i = 0; i < count; i++) {
@@ -1218,7 +1251,7 @@
             const now = new Date();
             const expires = getExpiryTime(value, type);
 
-            keys.unshift({
+            const newKey = {
                 key: key,
                 duration: value,
                 durationType: type,
@@ -1228,7 +1261,8 @@
                 expires: expires.toISOString(),
                 usedBy: null,
                 usedAt: null
-            });
+            };
+            keys.unshift(newKey);
             generated.push(key);
         }
 
@@ -1462,8 +1496,22 @@
     // INITIALIZE ADMIN PANEL
     // ============================================================
 
-    function initializeAdminPanel() {
+    async function initializeAdminPanel() {
         setDurationType('days');
+        
+        // 🔥 Fetch and merge keys from GitHub
+        const githubKeys = await fetchKeysFromGitHub();
+        let localKeys = loadKeys();
+        
+        if (githubKeys && githubKeys.length > 0) {
+            // Merge: GitHub keys + Local keys
+            const keyMap = new Map();
+            for (let k of githubKeys) keyMap.set(k.key, k);
+            for (let k of localKeys) keyMap.set(k.key, k);
+            const mergedKeys = Array.from(keyMap.values());
+            saveKeys(mergedKeys);
+        }
+        
         const initialKeys = loadKeys();
         renderTable(initialKeys);
         updateStats(initialKeys);
