@@ -1,85 +1,53 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>NEXO Validation</title>
-</head>
 <body>
-    <pre id="output"></pre>
-    <script>
-        // 🔥 Pure JSON output - No HTML formatting!
-        const output = document.getElementById('output');
+<script>
+// 🔥 SIRF JSON RETURN KAREGA - Koi HTML nahi!
+const params = new URLSearchParams(window.location.search);
+const key = params.get('key');
 
-        async function loadKeys() {
-            try {
-                const response = await fetch('keys.json?t=' + Date.now());
-                if (!response.ok) {
-                    throw new Error('keys.json not found');
-                }
-                const data = await response.json();
-                if (!Array.isArray(data)) return [data];
-                return data;
-            } catch (e) {
-                return null;
-            }
-        }
+async function loadKeys() {
+    try {
+        const response = await fetch('keys.json?t=' + Date.now());
+        if (!response.ok) throw new Error('keys.json not found');
+        const data = await response.json();
+        return Array.isArray(data) ? data : [data];
+    } catch (e) {
+        return null;
+    }
+}
 
-        async function validateKey(key) {
-            const keys = await loadKeys();
-            if (!keys) {
-                return { valid: false, reason: 'Failed to load keys.json' };
-            }
+async function validateKey(key) {
+    const keys = await loadKeys();
+    if (!keys) return { valid: false, reason: 'Failed to load keys.json' };
+    if (keys.length === 0) return { valid: false, reason: 'No keys found' };
+    
+    const found = keys.find(k => k.key.toUpperCase() === key.toUpperCase());
+    if (!found) return { valid: false, reason: 'Key not found' };
+    if (found.status === 'used') return { valid: false, reason: 'Key already used' };
+    
+    const now = new Date();
+    const expires = new Date(found.expires);
+    if (now > expires) return { valid: false, reason: 'Key expired' };
+    
+    return {
+        valid: true,
+        key: found.key,
+        duration: found.duration,
+        expires: found.expires,
+        days_left: Math.ceil((expires - now) / (1000 * 60 * 60 * 24))
+    };
+}
 
-            if (keys.length === 0) {
-                return { valid: false, reason: 'No keys found' };
-            }
-
-            const found = keys.find(k => k.key.toUpperCase() === key.toUpperCase());
-            if (!found) {
-                return { valid: false, reason: 'Key not found' };
-            }
-
-            if (found.status === 'used') {
-                return { valid: false, reason: 'Key already used' };
-            }
-
-            const now = new Date();
-            const expires = new Date(found.expires);
-            
-            if (now > expires) {
-                return { valid: false, reason: 'Key expired' };
-            }
-
-            const daysLeft = Math.ceil((expires - now) / (1000 * 60 * 60 * 24));
-            return {
-                valid: true,
-                key: found.key,
-                duration: found.duration,
-                expires: found.expires,
-                days_left: daysLeft,
-                status: found.status
-            };
-        }
-
-        const params = new URLSearchParams(window.location.search);
-        const key = params.get('key');
-
-        async function main() {
-            if (!key) {
-                output.textContent = JSON.stringify({ valid: false, reason: 'No key provided' });
-                return;
-            }
-
-            try {
-                const result = await validateKey(key);
-                // 🔥 ONLY JSON - No HTML tags!
-                output.textContent = JSON.stringify(result);
-            } catch (error) {
-                output.textContent = JSON.stringify({ valid: false, reason: error.message });
-            }
-        }
-
-        main();
-    </script>
+if (key) {
+    validateKey(key).then(result => {
+        document.write(JSON.stringify(result));
+    }).catch(err => {
+        document.write(JSON.stringify({ valid: false, reason: err.message }));
+    });
+} else {
+    document.write(JSON.stringify({ valid: false, reason: 'No key provided' }));
+}
+</script>
 </body>
 </html>
